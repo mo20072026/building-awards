@@ -276,9 +276,10 @@
       "id": "well",
       "abbr": "WELL",
       "checked_at": "2026-10-19",
-      "method": "官方原文比对（人工核读）",
+      "method": "官方数字化标准 / 接口 + 评分规则原文比对（人工核读）",
       "sources": [
-        "https://well.support/727d504c-f24c-4b3c-bdd1-1bccf7725c41",
+        "https://v2.wellcertified.com/",
+        "https://v2-api.wellcertified.com/api/latestVersions",
         "https://support.wellcertified.com/hc/en-us/articles/25652750343959-Create-a-custom-scorecard"
       ],
       "values": {
@@ -288,7 +289,12 @@
           50,
           60,
           80
-        ]
+        ],
+        "detail": {
+          "concepts": 11,
+          "features": 126,
+          "cap": 12
+        }
       },
       "manual_review": {
         "at": "2026-10-19",

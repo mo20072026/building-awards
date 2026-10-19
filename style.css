@@ -186,3 +186,30 @@ table.tbl tr td:first-child{font-weight:600;white-space:nowrap}
 .st.arch{background:var(--green-bg);color:#0b6b48;border:1px solid #bfe5d5}
 tr.row-na td{background:#fffdf7}
 @media(max-width:760px){.fold-t{font-size:16px}.fold-s{font-size:11.8px;width:100%;order:3}.na-how{min-width:0;width:100%}}
+
+/* ---------- 细项指标（概念 → 特性清单） ---------- */
+.dt-note{font-size:12.6px;color:#8a6d1f;background:#fffcf3;border:1px solid #f0dcb4;border-radius:8px;padding:8px 12px;margin:0 0 12px;line-height:1.7}
+.dt-sum td.num,.dt-tbl td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.dt-sum td:first-child{font-weight:700}
+.dt-sum tr:last-child td{background:#f6f8fa}
+.dt-groups{margin-top:12px;display:flex;flex-direction:column;gap:8px}
+.dt{border:1px solid var(--line);border-radius:9px;background:#fff;overflow:hidden}
+.dt>summary{list-style:none;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;cursor:pointer;padding:10px 13px;outline:none;background:#fafbfc}
+.dt>summary::-webkit-details-marker{display:none}
+.dt>summary::marker{content:''}
+.dt>summary:hover{background:#f2f6fb}
+.dt>summary>b{font-size:13.4px;color:#23303c;flex:none}
+.dt-m{font-size:12.1px;color:var(--muted);flex:1;min-width:180px}
+.dt-x{font-size:11.6px;color:var(--accent);border:1px solid #ccd6e0;border-radius:999px;padding:1px 9px;background:#fff;flex:none}
+.dt-x::before{content:'▸ ';font-size:9px}
+.dt[open] .dt-x::before{content:'▾ '}
+.dt-tbl{margin:0;border:none;border-top:1px solid var(--line)}
+.dt-tbl th{background:#f6f8fa;font-size:12px}
+.dt-tbl td{font-size:12.4px;padding:6px 10px}
+.dt-tbl td.code{font-variant-numeric:tabular-nums;font-weight:700;color:#35617e;white-space:nowrap;width:52px}
+.dt-tbl tr.is-p td{background:#fbfaf5}
+.pt{font-size:11.2px;border-radius:999px;padding:0 7px;white-space:nowrap}
+.pt.p{background:#eef2f7;color:#41525f;border:1px solid #dbe3ea}
+.pt.o{background:#eef4fb;color:#22557f;border:1px solid #cfe0f0}
+.beta{font-size:10.5px;color:#8a6d1f;background:#fdf3e3;border:1px solid #f0dcb4;border-radius:4px;padding:0 4px;margin-left:6px;white-space:nowrap}
+@media(max-width:760px){.dt-m{width:100%;order:3;min-width:0}.dt-tbl td{font-size:11.8px;padding:5px 8px}}

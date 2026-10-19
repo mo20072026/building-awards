@@ -441,9 +441,9 @@ const SYSTEMS = [
   id:'well', cat:'health', abbr:'WELL', name:'WELL（健康建筑标准）',
   region:'美国 · IWBI', tag:'健康建筑标杆',
   tagline:'健康建筑标杆体系，室内人居健康的国际金标准。',
-  src:{ doc:'WELL v2 Certification – 评分与等级规则', ver:'WELL v2', org:'IWBI / GBCI',
-        url:'https://well.support/727d504c-f24c-4b3c-bdd1-1bccf7725c41', checked:'2026-10-19', status:'verified',
-        note:'已核原文：铜 40 / 银 50 / 金 60 / 铂金 80；满分 110（100 特性 + 10 创新）；银/金/铂金分别要求每个概念至少 1/2/3 分，铜级无单概念最低要求。' },
+  src:{ doc:'WELL v2 数字化标准（含全部概念与特性）+ 评分规则', ver:'WELL v2, Q2 2025（版本 id 229）', org:'IWBI / GBCI',
+        url:'https://v2.wellcertified.com/', checked:'2026-10-19', status:'verified',
+        note:'已核官方原文：铜 40 / 银 50 / 金 60 / 铂金 80；满分 100 + 创新 10；银/金/铂金分别要求每概念至少 1/2/3 分，铜级无单概念最低要求；每概念计入上限 12 分。细项取自官方接口 v2-api.wellcertified.com/api/229/conceptAndFeature（11 个概念、126 个特性（其中创新 6 项））。' },
   apply:[
     '在 IWBI <b>注册</b>项目并选定版本（WELL v2）与空间类型；',
     '建议聘请 <b>WELL AP</b> 统筹；',
@@ -468,7 +468,28 @@ const SYSTEMS = [
     '与 Fitwel 相比：检测要求重（需第三方现场实测）、成本高，但公认度最高。'
   ],
   calc:{ type:'total', unit:'分', total:110, note:'满分 110 分；须先达成全部先决条件。',
-    thresholds:[{min:40,lvl:'Bronze 铜级'},{min:50,lvl:'Silver 银级'},{min:60,lvl:'Gold 金级'},{min:80,lvl:'Platinum 铂金级'}] }
+    thresholds:[{min:40,lvl:'Bronze 铜级'},{min:50,lvl:'Silver 银级'},{min:60,lvl:'Gold 金级'},{min:80,lvl:'Platinum 铂金级'}] },
+  detail:{
+    title:'细项指标 · 概念特性构成',
+    cap:12,
+    capNote:'每概念计入总分上限 12 分；概念内可选分值超出 12 分时，超出部分计入 I01 创新分（创新合计上限 10 分）。计分卡总分仍封顶 100 分，另加创新分最多 10 分。',
+    cols:['概念','先决条件 P','优化条件 O','可选分合计','计入上限'],
+    rows:[['空气 Air（A）',4,10,20,12],['水 Water（W）',3,6,14,12],['营养 Nourishment（N）',2,12,16,12],['光 Light（L）',2,7,18,12],['运动 Movement（V）',2,9,21,12],['热舒适 Thermal Comfort（T）',1,8,16,12],['声环境 Sound（S）',1,8,18,12],['材料 Materials（X）',3,10,21,12],['精神 Mind（M）',2,9,19,12],['社区 Community（C）',4,17,49,12],['创新 Innovation（I）',0,6,28,10]],
+    note:'数据取自 WELL 官方数字化标准接口（WELL v2 Q2 2025，版本 id 229）的全部概念与特性（Feature）。P=先决条件，必须全部达成且不计分；O=优化条件，按官方分值计分；标 β 者为试行（beta）特性。中文名为官方英文名的译名，申报以英文原文为准。',
+    groups:[
+      {name:'空气 Air（A）',p:4,o:10,pts:20,items:[['A01','空气质量 Air Quality','P',0,0],['A02','无烟环境 Smoke-Free Environment','P',0,0],['A03','通风设计 Ventilation Design','P',0,0],['A04','施工污染管理 Construction Pollution Management','P',0,0],['A05','提升空气质量 Enhanced Air Quality','O',4,0],['A06','提升通风设计 Enhanced Ventilation Design','O',3,0],['A07','可开启外窗 Operable Windows','O',2,0],['A08','空气质量监测与告知 Air Quality Monitoring and Awareness','O',2,0],['A09','污染渗入管理 Pollution Infiltration Management','O',2,0],['A10','燃烧源最小化 Combustion Minimization','O',1,0],['A11','污染源隔离 Source Separation','O',1,0],['A12','空气过滤 Air Filtration','O',1,0],['A13','提升送风品质 Enhanced Supply Air','O',3,0],['A14','微生物与霉菌控制 Microbe and Mold Control','O',1,0]]},
+      {name:'水 Water（W）',p:3,o:6,pts:14,items:[['W01','水质指标 Water Quality Indicators','P',0,0],['W02','饮用水水质 Drinking Water Quality','P',0,0],['W03','基本水管理 Basic Water Management','P',0,0],['W04','提升水质 Enhanced Water Quality','O',1,0],['W05','饮用水质量管理 Drinking Water Quality Management','O',3,0],['W06','饮水促进 Drinking Water Promotion','O',1,0],['W07','潮湿管理 Moisture Management','O',3,0],['W08','卫生支持 Hygiene Support','O',4,0],['W09','现场非饮用水回用 Onsite Non-Potable Water Reuse','O',2,1]]},
+      {name:'营养 Nourishment（N）',p:2,o:12,pts:16,items:[['N01','果蔬供应 Fruits and Vegetables','P',0,0],['N02','营养信息透明 Nutritional Transparency','P',0,0],['N03','精制成分限制 Refined Ingredients','O',2,0],['N04','食品广告 Food Advertising','O',1,0],['N05','人工添加剂 Artificial Ingredients','O',1,0],['N06','份量控制 Portion Sizes','O',1,0],['N07','营养教育 Nutrition Education','O',1,0],['N08','正念饮食 Mindful Eating','O',2,0],['N09','特殊膳食 Special Diets','O',2,0],['N10','食物制备 Food Preparation','O',1,0],['N11','负责任食物采购 Responsible Food Sourcing','O',1,0],['N12','食物生产 Food Production','O',2,0],['N13','本地食物环境 Local Food Environment','O',1,0],['N14','红肉与加工肉 Red and Processed Meats','O',1,0]]},
+      {name:'光 Light（L）',p:2,o:7,pts:18,items:[['L01','光照暴露 Light Exposure','P',0,0],['L02','视觉照明设计 Visual Lighting Design','P',0,0],['L03','昼夜节律照明设计 Circadian Lighting Design','O',3,0],['L04','电光源眩光控制 Electric Light Glare Control','O',2,0],['L05','天然采光策略 Daylight Design Strategies','O',4,0],['L06','采光模拟 Daylight Simulation','O',2,0],['L07','视觉平衡 Visual Balance','O',1,0],['L08','电光源品质 Electric Light Quality','O',3,0],['L09','使用者照明控制 Occupant Lighting Control','O',3,0]]},
+      {name:'运动 Movement（V）',p:2,o:9,pts:21,items:[['V01','活力建筑与社区 Active Buildings and Communities','P',0,0],['V02','人体工学工位设计 Ergonomic Workstation Design','P',0,0],['V03','通行网络 Circulation Network','O',3,0],['V04','活力配套设施 Facilities for Active Occupants','O',3,0],['V05','场地规划与选址 Site Planning and Selection','O',4,0],['V06','身体活动机会 Physical Activity Opportunities','O',2,0],['V07','活动家具 Active Furnishings','O',2,0],['V08','活动空间与器材 Physical Activity Spaces and Equipment','O',2,0],['V09','身体活动促进 Physical Activity Promotion','O',1,0],['V10','自我监测 Self-Monitoring','O',1,0],['V11','人体工学计划 Ergonomics Programming','O',3,0]]},
+      {name:'热舒适 Thermal Comfort（T）',p:1,o:8,pts:16,items:[['T01','热工性能 Thermal Performance','P',0,0],['T02','热舒适验证 Verified Thermal Comfort','O',3,0],['T03','分区温控 Thermal Zoning','O',2,0],['T04','个人温控 Individual Thermal Control','O',3,0],['T05','辐射热舒适 Radiant Thermal Comfort','O',2,0],['T06','热舒适监测 Thermal Comfort Monitoring','O',1,0],['T07','湿度控制 Humidity Control','O',1,0],['T08','提升可开启外窗 Enhanced Operable Windows','O',1,1],['T09','室外热舒适 Outdoor Thermal Comfort','O',3,1]]},
+      {name:'声环境 Sound（S）',p:1,o:8,pts:18,items:[['S01','声环境测绘 Sound Mapping','P',0,0],['S02','最大噪声级 Maximum Noise Levels','O',3,0],['S03','隔声屏障 Sound Barriers','O',3,0],['S04','混响时间 Reverberation Time','O',2,0],['S05','吸声表面 Sound Reducing Surfaces','O',2,0],['S06','最小背景声 Minimum Background Sound','O',2,0],['S07','撞击声管理 Impact Noise Management','O',3,1],['S08','提升音频设备 Enhanced Audio Devices','O',2,0],['S09','听力健康保护 Hearing Health Conservation','O',1,1]]},
+      {name:'材料 Materials（X）',p:3,o:10,pts:21,items:[['X01','材料限制 Material Restrictions','P',0,0],['X02','室内危险材料管理 Interior Hazardous Materials Management','P',0,0],['X03','铬化砷酸铜与铅管理 CCA and Lead Management','P',0,0],['X04','场地修复 Site Remediation','O',1,0],['X05','提升材料限制 Enhanced Material Restrictions','O',2,0],['X06','VOC 限制 VOC Restrictions','O',4,0],['X07','材料透明度 Materials Transparency','O',3,0],['X08','材料优化 Materials Optimization','O',2,0],['X09','废弃物管理 Waste Management','O',1,0],['X10','虫害与农药管理 Pest Management and Pesticide Use','O',1,0],['X11','清洁产品与规程 Cleaning Products and Protocols','O',2,0],['X12','接触减少 Contact Reduction','O',2,0],['X13','建材公平劳工 Fair Labor in Building Products','O',3,1]]},
+      {name:'精神 Mind（M）',p:2,o:9,pts:19,items:[['M01','心理健康促进 Mental Health Promotion','P',0,0],['M02','自然与场所 Nature and Place','P',0,0],['M03','心理健康服务 Mental Health Services','O',4,0],['M04','心理健康教育 Mental Health Education','O',2,0],['M05','压力管理 Stress Management','O',2,0],['M06','恢复机会 Restorative Opportunities','O',2,0],['M07','恢复空间 Restorative Spaces','O',1,0],['M08','恢复活动 Restorative Programming','O',1,0],['M09','提升自然接触 Enhanced Access to Nature','O',2,0],['M10','戒烟支持 Tobacco Cessation','O',3,0],['M11','物质使用支持 Substance Use Services','O',2,0]]},
+      {name:'社区 Community（C）',p:4,o:17,pts:49,items:[['C01','健康福祉促进 Health and Well-Being Promotion','P',0,0],['C02','整合设计 Integrative Design','P',0,0],['C03','应急准备 Emergency Preparedness','P',0,0],['C04','使用者调查 Occupant Survey','P',0,0],['C05','提升使用者调查 Enhanced Occupant Survey','O',4,0],['C06','健康服务与福利 Health Services and Benefits','O',5,0],['C07','提升健康促进 Enhanced Health and Well-Being Promotion','O',2,0],['C08','新生儿父母支持 New Parent Support','O',3,0],['C09','新妈妈支持 New Mother Support','O',3,0],['C10','家庭支持 Family Support','O',3,0],['C11','公众参与 Civic Engagement','O',2,0],['C12','人才招聘与员工行动计划 Talent Recruitment and Workforce Action Plans','O',3,0],['C13','无障碍与通用设计 Accessibility and Universal Design','O',4,0],['C14','应急资源 Emergency Resources','O',2,0],['C15','应急韧性与恢复 Emergency Resilience and Recovery','O',4,1],['C16','可负担住房 Affordable Housing','O',2,1],['C17','负责任劳工实践 Responsible Labor Practices','O',3,1],['C18','家暴受害者支持 Support for Victims of Domestic Violence','O',2,1],['C19','教育与支持 Education and Support','O',2,1],['C20','历史承认 Historical Acknowledgement','O',1,1],['C21','多感官设计 𝛽 Multisensory Design','O',4,0]]},
+      {name:'创新 Innovation（I）',p:0,o:6,pts:28,items:[['I01','创新实践（WELL） Innovate WELL','O',10,0],['I02','WELL AP 专业人士 WELL Accredited Professional (WELL AP)','O',1,0],['I03','体验 WELL 认证 Experience WELL Certification','O',1,0],['I04','健康门户 Gateways to Well-Being','O',1,0],['I05','绿色建筑评级对接 Green Building Rating Systems','O',5,0],['I06','碳披露与减排 Carbon Disclosure and Reduction','O',10,0]]},
+    ]
+  },
 },
 {
   id:'hsr', cat:'health', abbr:'WELL HSR', name:'WELL HSR',
@@ -831,7 +852,8 @@ function certHTML(s){
         ${s.levels.map((l,i)=>`<tr><td>${l.name}</td><td>${l.range||'—'}</td><td>${l.desc||''}</td></tr>`).join('')}</table>
         <h4 class="blk">评价指标构成</h4>
         <table class="tbl"><tr><th>指标类别</th><th>权重 / 满分</th></tr>
-        ${s.indicators.map(it=>`<tr><td>${it[0]}</td><td>${it[1]!==undefined?it[1]:'—'}</td></tr>`).join('')}</table>
+        ${s.indicators.map(it=>`<tr><td>${it[0]}</td><td>${it[1]!==undefined?it[1]:(s.detail&&s.detail.cap?`上限 ${s.detail.cap} 分`:'—')}</td></tr>`).join('')}</table>
+        ${detailHTML(s)}
       </div>
       <div class="tabpane" data-pane="scoring">
         <h4 class="blk">评分规则</h4>
@@ -842,6 +864,40 @@ function certHTML(s){
       </div>
     </div>
   </article>`;
+}
+
+/* ---------- 细项指标（可选：概念 → 特性清单） ---------- */
+function detailHTML(s){
+  const d=s.detail; if(!d) return '';
+  const cols=(d.cols||[]).map(c=>`<th>${c}</th>`).join('');
+  const rows=(d.rows||[]).map(r=>`<tr><td>${r[0]}</td>
+    <td class="num">${r[1]}</td><td class="num">${r[2]}</td>
+    <td class="num">${r[3]}</td><td class="num"><b>${r[4]}</b></td></tr>`).join('');
+
+  const groups=(d.groups||[]).map(g=>{
+    const its=(g.items||[]).map(it=>`<tr class="${it[2]==='P'?'is-p':''}">
+      <td class="code">${it[0]}</td>
+      <td>${it[1]}${it[4]?'<span class="beta">β 试行</span>':''}</td>
+      <td><span class="pt ${it[2]==='P'?'p':'o'}">${it[2]==='P'?'先决条件':'优化条件'}</span></td>
+      <td class="num">${it[2]==='P'?'—':it[3]}</td></tr>`).join('');
+    return `<details class="dt" data-dt="${g.name}">
+      <summary>
+        <b>${g.name}</b>
+        <span class="dt-m">先决 ${g.p} · 优化 ${g.o} · 可选 ${g.pts} 分 · 计入上限 ${d.cap} 分</span>
+        <span class="dt-x">细项</span>
+      </summary>
+      <table class="tbl dt-tbl">
+        <tr><th>编号</th><th>特性名称</th><th>类型</th><th>分值</th></tr>
+        ${its}
+      </table>
+    </details>`;
+  }).join('');
+
+  return `<h4 class="blk">${d.title||'细项指标'}</h4>
+    ${d.capNote?`<p class="dt-note">${d.capNote}</p>`:''}
+    <table class="tbl dt-sum"><tr>${cols}</tr>${rows}</table>
+    <div class="dt-groups">${groups}</div>
+    ${d.note?`<p class="note">${d.note}</p>`:''}`;
 }
 
 /* ---------- 计算器 ---------- */
@@ -1049,6 +1105,21 @@ function runChecks(){
     p('评分标准非空', Array.isArray(s.scoring)&&s.scoring.length>0);
     p('计算器已配置', !!(s.calc&&s.calc.type));
 
+    /* 细项指标（如 WELL 的概念 → 特性清单）内部一致性 */
+    if(s.detail){
+      const g=s.detail.groups||[], dr=s.detail.rows||[];
+      p('细项：汇总表与分组数一致', g.length===dr.length, `${g.length}/${dr.length}`);
+      p('细项：先决+优化=特性数', g.every(x=>(x.items||[]).length===x.p+x.o),
+        g.filter(x=>(x.items||[]).length!==x.p+x.o).map(x=>x.name).join('、'));
+      p('细项：分值合计与汇总表一致',
+        g.every((x,i)=>!dr[i]||(dr[i][1]===x.p&&dr[i][2]===x.o&&dr[i][3]===x.pts)),
+        g.filter((x,i)=>dr[i]&&dr[i][3]!==x.pts).map(x=>x.name).join('、'));
+      p('细项：可选分≥计入上限', g.every((x,i)=>!dr[i]||x.pts>=dr[i][4]),
+        g.filter((x,i)=>dr[i]&&x.pts<dr[i][4]).map(x=>x.name).join('、'));
+      const codes=g.flatMap(x=>(x.items||[]).map(i=>i[0]));
+      p('细项：特性编号唯一', new Set(codes).size===codes.length, `${codes.length} 条`);
+    }
+
     const th=((s.calc&&s.calc.thresholds)||[]).map(t=>t.min);
     const max=s.calc&&s.calc.total;
     if(th.length){
@@ -1080,6 +1151,13 @@ function runChecks(){
         const w=s.indicators.map(i=>i[1]);
         if(!sameNums(f.values.weights,w)) diffs.push('指标权重与基准不符');
       }
+      if(f.values.detail&&s.detail){
+        const g=s.detail.groups||[], feats=g.reduce((a,x)=>a+(x.items||[]).length,0);
+        if(f.values.detail.concepts!==g.length) diffs.push(`细项概念数 ${f.values.detail.concepts} → ${g.length}`);
+        if(f.values.detail.features!==feats) diffs.push(`细项特性数 ${f.values.detail.features} → ${feats}`);
+        if(f.values.detail.cap!==s.detail.cap) diffs.push(`单概念上限 ${f.values.detail.cap} → ${s.detail.cap}`);
+      }
+      if(f.values.detail&&!s.detail) diffs.push('基准有细项数据但页面缺失');
       l2.push({id:s.id,abbr:s.abbr,ok:!diffs.length,diffs});
     } else {
       l2.push({id:s.id,abbr:s.abbr,ok:false,diffs:[FACTS?'基准未收录该体系':'基准未加载']});

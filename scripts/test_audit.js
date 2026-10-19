@@ -86,6 +86,28 @@ function ok(cond, label) {
   const arcOne = c.l3.find((x) => x.status === 'archived');
   if (arcOne) ok(!!doc.querySelector('.st.arch'), '存档比对状态徽标已渲染');
 
+  console.log('【细项指标（WELL 概念 → 特性）】');
+  const well = w.__SYSTEMS.find((s) => s.id === 'well');
+  ok(!!(well && well.detail), 'WELL 已挂载细项数据');
+  if (well && well.detail) {
+    const g = well.detail.groups || [];
+    const card = doc.querySelector('#cert-well');
+    ok(g.length === 11, `细项分组 11 个（概念 10 + 创新）实际 ${g.length}`);
+    const feats = g.reduce((a, x) => a + x.items.length, 0);
+    ok(feats === 126, `细项特性 126 条（含创新 6 条）实际 ${feats}`);
+    ok(!!card.querySelector('.dt-sum'), '细项汇总表已渲染');
+    ok(card.querySelectorAll('.dt').length === g.length, '每个概念一个可折叠细项块');
+    ok(card.querySelectorAll('.dt-tbl tr').length - g.length === feats, '特性行数与数据一致');
+    const sumRow = [...card.querySelectorAll('.dt-sum tr')].slice(1);
+    ok(sumRow.length === 11, '汇总表 11 行');
+    ok(/12/.test(sumRow[0].textContent) && /20/.test(sumRow[0].textContent), '汇总行含可选分与计入上限');
+    const indTbl = card.querySelectorAll('[data-pane=levels] table.tbl')[1];
+    ok(/上限 12 分/.test(indTbl.textContent), '指标表显示每概念上限');
+    const firstGroup = card.querySelector('.dt');
+    firstGroup.open = true;
+    ok(firstGroup.querySelectorAll('.dt-tbl tr').length === g[0].items.length + 1, '展开后显示全部特性行');
+  }
+
   console.log('【变异测试：基准比对应能抓到改动】');
   const S = w.__SYSTEMS;
   const t = S.find((s) => s.id === 'leed');
