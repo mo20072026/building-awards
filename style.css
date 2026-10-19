@@ -57,6 +57,15 @@ ul.steps li::before{content:"";position:absolute;left:4px;top:12px;width:7px;hei
 ul.steps li b{color:var(--ink)}
 .badge-line{margin:6px 0 0;font-size:12.5px;color:var(--muted)}
 .badge-line span{display:inline-block;background:#eef2f7;border-radius:5px;padding:1px 8px;margin-right:6px}
+/* 依据行 / 核对状态 */
+.src-line{font-size:12.3px;color:var(--muted);background:#f7f9fb;border:1px solid var(--line);border-radius:8px;padding:7px 10px;margin:8px 0 2px;line-height:1.6}
+.src-line a{color:var(--accent);text-decoration:none}
+.src-line a:hover{text-decoration:underline}
+.st{display:inline-block;border-radius:20px;padding:0 9px;font-size:11.5px;font-weight:700;white-space:nowrap;margin-left:4px}
+.st.ok{background:#e8f6f0;color:#0b6b48;border:1px solid #bfe5d5}
+.st.warn{background:#fdf3e3;color:#9a6a10;border:1px solid #f0dcb4}
+.src-intro{font-size:13px;color:var(--muted);margin:-2px 0 10px}
+#sources table td:nth-child(2){white-space:normal}
 table.tbl{width:100%;border-collapse:collapse;font-size:13.3px;margin:6px 0}
 table.tbl th{background:#f0f3f7;text-align:left;padding:7px 10px;border:1px solid var(--line);font-size:12.5px;color:#41566b;white-space:nowrap}
 table.tbl td{padding:7px 10px;border:1px solid var(--line);vertical-align:top}

@@ -28,6 +28,9 @@ const SYSTEMS = [
   id:'leed', cat:'green', abbr:'LEED', name:'LEED（能源与环境设计先锋）',
   region:'美国 · USGBC / GBCI', tag:'全球应用最广',
   tagline:'建筑对地球友好（环境可持续），国内大批外资与高端项目的默认对齐体系。',
+  src:{ doc:'LEED v4.1 BD+C 评分表 / LEED v5（新建项目现行注册版本）', ver:'v4.1 · v5', org:'USGBC / GBCI',
+        url:'https://www.usgbc.org/leed/v41', checked:'2026-10-19', status:'verified',
+        note:'2026 年起 LEED v5 为新建项目现行注册版本，v4.1 仍接受既有项目完成认证；两版总分同为 110 分，v5 强化运行碳/隐含碳与韧性。' },
   apply:[
     '在 GBCI 官网<b>注册项目</b>并选定体系版本（LEED v4 / v4.1）与评价体系（BD+C 新建、O+M 运营、ID+C 室内等）；',
     '聘请 <b>LEED AP</b> 专业人员或顾问团队，进行目标等级可行性分析；',
@@ -57,6 +60,9 @@ const SYSTEMS = [
   id:'breeam', cat:'green', abbr:'BREEAM', name:'BREEAM',
   region:'英国 · BRE', tag:'全球最早',
   tagline:'全球最早的绿色建筑评估体系，侧重全生命期：生态、韧性。',
+  src:{ doc:'BREEAM UK New Construction 2018 技术手册（SD5078）', ver:'2018 / 手册 v6', org:'BRE Global',
+        url:'https://files.bregroup.com/breeam/technicalmanuals/NC2018/content/', checked:'2026-10-19', status:'verified',
+        note:'权重随评估范围（全装修/简单建筑/壳与核/仅壳）变化；本页取"全装修 fully fitted out"口径。BRE 另有 BREEAM V7（2024）新版，注册时以官网现行版本为准。' },
   apply:[
     '在 BRE 项目系统<b>注册</b>，确定评价方案（New Construction / In-Use / Refurbishment）；',
     '聘请持证 <b>BREEAM 评估师（Assessor）</b>开展评估；',
@@ -72,13 +78,14 @@ const SYSTEMS = [
     {name:'Outstanding 卓越',range:'≥85%',  desc:'示范级'}
   ],
   indicators:[
-    ['管理 Management',12],['健康与福祉',15],['能源',15],['交通',9],['水',7],
-    ['材料',15],['废弃物',8],['土地利用与生态',10],['污染',9]
+    ['管理 Management',11],['健康与福祉',14],['能源',16],['交通',10],['水',7],
+    ['材料',15],['废弃物',6],['土地利用与生态',13],['污染',8]
   ],
   scoring:[
     '各章节得分率按<b>权重</b>加权成总分百分比，另可加创新分（最高 10%）；',
-    '每个等级设有<b>强制最低得分（Mandatory Credits）</b>，总分够但强项不足会被压级；',
-    '生态与能源章节需委托专业人员出具调研/模拟报告。'
+    '权重按评估范围分四套口径（全装修 / 简单建筑 / 壳与核 / 仅壳），本页取全装修口径；',
+    '每个等级设有<b>强制最低得分（Minimum Standards）</b>，总分够但关键项不足会被压级；',
+    'BRE 已发布 BREEAM V7（2024），新版对齐净零碳路径，注册前须确认适用版本。'
   ],
   calc:{ type:'items', unit:'%', percent:true, note:'按加权得分率定级；每个等级另设强制最低分。',
     thresholds:[{min:30,lvl:'Pass'},{min:45,lvl:'Good'},{min:55,lvl:'Very Good'},{min:70,lvl:'Excellent'},{min:85,lvl:'Outstanding'}] }
@@ -87,6 +94,9 @@ const SYSTEMS = [
   id:'dgnb', cat:'green', abbr:'DGNB', name:'DGNB',
   region:'德国 · DGNB 协会', tag:'综合可持续',
   tagline:'德国可持续建筑，强调经济、生态、社会三位一体的全生命期，欧洲高端项目常用，不是单纯拼节能。',
+  src:{ doc:'DGNB System – New Buildings（评分与等级规则）', ver:'2023 版', org:'DGNB e.V.',
+        url:'https://www.dgnb-system.de/en/', checked:'', status:'pending',
+        note:'六维权重与 35/50/65/80 分数线为通用口径，DGNB 各建筑类型模块权重略有差异，待逐册核对官方评分表。' },
   apply:[
     '在 DGNB <b>注册项目</b>并选定建筑类型模块（办公、住宅、混合等）；',
     '委托 DGNB 授权的<b>审核顾问（Auditor）</b>全程负责文件与送审；',
@@ -116,35 +126,46 @@ const SYSTEMS = [
   id:'greenmark', cat:'green', abbr:'GM', name:'Green Mark',
   region:'新加坡 · BCA 建设局', tag:'热带气候标杆',
   tagline:'热带气候建筑基准，东南亚标杆，国内外很多外资项目会做。',
+  src:{ doc:'Green Mark 2021 Certification Standard（第 2/3 版）', ver:'GM:2021', org:'BCA 新加坡建设局',
+        url:'https://www1.bca.gov.sg/docs/default-source/docs-corp-buildsg/sustainability/20240101_certification_standard_r2.pdf',
+        checked:'2026-10-19', status:'verified',
+        note:'GM:2021 已改按"相对 2005 基线的节能率"分档（非百分制）；Gold 档仅适用于 In-Operation 复评项目，新建项目从 GoldPLUS 起评。' },
   apply:[
-    '向新加坡建设局（BCA）<b>提交申请</b>并注册项目；',
-    '由 BCA 认可的<b>评估师</b>按评分表逐项核算（设计阶段可先行评估）；',
-    '竣工后进行<b>核验</b>确认设计措施落地；',
-    '授证后有效期通常为 <b>3 年</b>，到期需复评维持等级；',
-    'GM:2021 新版已转向以<b>碳排/能耗绝对表现</b>定级。'
+    '向新加坡建设局（BCA）<b>提交申请</b>，选定新建 / 重大改造（Full GM:2021）或 In-Operation 复评轨道；',
+    '<b>能源效率是唯一先决条件</b>，须从三条路径选一：EUI 实测强度、Fixed Metrics 分项指标、或 Energy Savings 模型对比；',
+    '在智慧化、健康与福祉、全生命期碳、可维护性、韧性五个章节得分（单节 ≥10 分可获该章节徽章）；',
+    '竣工或运行数据核验后授证；可叠加 <b>SLE</b>（超低能耗）、<b>ZE</b>（零能耗）、<b>PE</b>（正能耗）标识；',
+    '有效期通常 3 年，到期复评。'
   ],
   levels:[
-    {name:'Certified 认证', range:'≥50 分', desc:'入门'},
-    {name:'Gold 金',        range:'≥75 分', desc:'常规'},
-    {name:'Gold★Plus 超金', range:'≥85 分', desc:'高端'},
-    {name:'Platinum 白金',  range:'≥90 分', desc:'标杆'}
+    {name:'Certified', range:'节能 10–25%', desc:'最低合规档'},
+    {name:'Gold', range:'节能 25–45%', desc:'仅 In-Operation 复评项目适用'},
+    {name:'GoldPLUS', range:'节能 45–60%', desc:'新建项目主流目标'},
+    {name:'Platinum / SLE', range:'节能 ≥60%', desc:'最高档，SLE 与铂金同门槛'},
+    {name:'ZE / PE（进阶标识）', range:'100% / 115% 可再生能源覆盖', desc:'零能耗 / 正能耗'}
   ],
   indicators:[
-    ['节能（含围护/空调/照明）',30],['节水',20],['材料与废弃物',15],
-    ['室内环境质量',15],['环境保护与其他绿色措施',20]
+    ['能源效率（唯一先决条件，三条路径）',1],['智慧化 Intelligence',1],['健康与福祉 Health & Well-being',1],
+    ['全生命期碳 Whole Life Carbon',1],['可维护性 Maintainability',1],['韧性 Resilience',1]
   ],
   scoring:[
-    '各条目累加计分，达到对应分值线即授相应等级；',
-    '热带气候特色条目：<b>围护结构 OTTV/EUTV</b> 限值、空调系统综合效率等权重很高；',
-    '下表分值线按旧版百分制概化，GM:2021 以能耗表现定级，仅供定位参考。'
+    '等级不看累加总分，而看<b>相对 2005 基线（或现行规范）的节能率</b>：10% / 25% / 45% / 60% 四道门槛；',
+    '节能率由 EUI 实测、分项指标（围护 OTTV/EUTV、空调系统效率等）或能耗模型三种路径之一证实；',
+    '其余五章节为加分项：<b>单节 ≥10 分</b>授予该章节徽章，满分项目可到 40 分（GoldPLUS 30 分）；',
+    'SLE 需节能 ≥60%（或相对现行规范 40%）；ZE 需 100%、PE 需 115% 能耗由可再生能源覆盖。'
   ],
-  calc:{ type:'items', unit:'分', total:100, note:'分值线按旧版百分制概化；GM:2021 以能耗/碳排表现定级。',
-    thresholds:[{min:50,lvl:'Certified'},{min:75,lvl:'Gold'},{min:85,lvl:'Gold★Plus'},{min:90,lvl:'Platinum'}] }
+  calc:{ type:'total', unit:'%', total:100, label:'相对 2005 基线的节能率（%）',
+    note:'按 GM:2021 节能率分档；新建项目 Gold 档不适用，实际从 GoldPLUS 起评。',
+    thresholds:[{min:10,lvl:'Certified'},{min:25,lvl:'Gold（仅复评）'},{min:45,lvl:'GoldPLUS'},{min:60,lvl:'Platinum / SLE'}] }
 },
 {
   id:'beam', cat:'green', abbr:'BEAM', name:'BEAM Plus',
-  region:'中国香港 · HKGBC', tag:'大湾区主流',
+  region:'中国香港 · HKGBC / BSL', tag:'大湾区主流',
   tagline:'香港绿色建筑认证，内地大湾区项目高度使用。',
+  src:{ doc:'BEAM Plus New Buildings v2.0 评估手册（2021 / 2025 修订）', ver:'NB v2.0', org:'HKGBC / BEAM Society',
+        url:'https://www.hkgbc.org.hk/eng/beam-plus/beam-plus-references/manuals-assessment/ManualsFiles/BEAMPlus-NBV2-2021-EN.pdf',
+        checked:'2026-10-19', status:'verified',
+        note:'官方规定：须满足全部先决条件（Prerequisites），且每类得分不低于 20%，总分 ≥75% 方可获铂金级。' },
   apply:[
     '向香港绿建议会（HKGBC）<b>注册</b>项目并选定版本（NB 新建 / EB 既有）；',
     '聘请 <b>BEAM Pro</b> 专业人士统筹评估；',
@@ -159,21 +180,25 @@ const SYSTEMS = [
     {name:'Platinum 铂金级',range:'≥75%', desc:'标杆'}
   ],
   indicators:[
-    ['综合设计与建造管理',15],['可持续场地',15],['材料与废弃物',15],
-    ['能源使用',25],['用水',10],['室内环境质量',20]
+    ['综合设计与建造管理 IDCM',18],['可持续场地 SS',15],['材料与废弃物 MW',9],
+    ['能源使用 EU',29],['用水 WU',7],['健康与福祉 HWB',22]
   ],
   scoring:[
-    '按各类别得分占<b>可得学分</b>的百分比加权汇总定级；',
-    '能源类别占比最高（约 1/4），且设<b>必备条款</b>；',
-    '权重按新版概化，实际以现行评估手册为准。'
+    '按各类别得分占可得学分的百分比<b>加权汇总</b>（权重合计 100%）定级；',
+    '官方硬性要求：满足<b>全部先决条件</b>，且<b>每类得分 ≥20%</b>，否则不予评级；',
+    '加分学分（BONUS）按 1.2 倍计入所属类别；创新类（IA）最多可提交 10 个学分；',
+    '权重来自 BEAM Plus NB v2.0 手册表 1（IDCM 18 / SS 15 / MW 9 / EU 29 / WU 7 / HWB 22）。'
   ],
   calc:{ type:'items', unit:'%', percent:true, note:'按占可得学分百分比定级。',
     thresholds:[{min:40,lvl:'Bronze 铜级'},{min:55,lvl:'Silver 银级'},{min:65,lvl:'Gold 金级'},{min:75,lvl:'Platinum 铂金级'}] }
 },
 {
   id:'edge', cat:'green', abbr:'EDGE', name:'EDGE',
-  region:'世行 IFC · GBCI 审核', tag:'低成本低成本量',
+  region:'世行 IFC · GBCI 审核', tag:'低成本批量',
   tagline:'低成本新兴市场绿建，门槛：能耗、水、建材含能各节省至少 20%，适合地产批量项目。',
+  src:{ doc:'EDGE Certification – 认证标准与三项资源门槛', ver:'EDGE v3', org:'IFC（世界银行集团）/ GBCI',
+        url:'https://edgebuildings.com/certify/', checked:'', status:'pending',
+        note:'三项 20% 门槛为公开通用口径；EDGE v3 的基准与材料含能计算方法待核官方标准文件。' },
   apply:[
     '使用 <b>EDGE 软件</b>免费建模，对比基准建筑测算三项资源节省率；',
     '在 GBCI <b>注册</b>并提交申请；',
@@ -212,6 +237,9 @@ const SYSTEMS = [
   id:'greenstar', cat:'green', abbr:'GS', name:'Green Star',
   region:'澳大利亚 · GBCA', tag:'澳新主流',
   tagline:'澳新主流绿建体系。',
+  src:{ doc:'Green Star Buildings / Performance 技术手册', ver:'Buildings v1 / Performance', org:'GBCA',
+        url:'https://new.gbca.org.au/green-star/rating-system/', checked:'', status:'pending',
+        note:'45/60/75 分对应 4/5/6 星为公开口径；各章节权重按 v1 手册概化，待逐表核对。' },
   apply:[
     '向澳洲绿建委员会（GBCA）<b>注册</b>并选择评价工具（Performance 运营版 / Buildings 新建版）；',
     '聘请 GBCA 认可的<b>独立评审员</b>；',
@@ -239,6 +267,9 @@ const SYSTEMS = [
   id:'lbc', cat:'green', abbr:'LBC', name:'Living Building Challenge',
   region:'美国 · ILFI', tag:'极限可持续',
   tagline:'最严苛，追求净零、自给自足、生物友好，属于"极限可持续"。',
+  src:{ doc:'Living Building Challenge 4.0 – Petal Handbook', ver:'LBC 4.0', org:'ILFI',
+        url:'https://living-future.org/lbc/', checked:'', status:'pending',
+        note:'七花瓣结构稳定；各花瓣必要条款（Imperatives）条目数随版本调整，待核 4.0 手册。' },
   apply:[
     '向国际未来生活研究所（ILFI）<b>注册</b>项目并选定花瓣路径；',
     '按花瓣要求设计：红名单材料规避、净零水、净零能源等；',
@@ -283,6 +314,9 @@ const SYSTEMS = [
   id:'greenglobes', cat:'green', abbr:'GG', name:'Green Globes',
   region:'美国/加拿大 · GBI', tag:'LEED 平价替代',
   tagline:'LEED 的简化替代，文档工作量更低。',
+  src:{ doc:'Green Globes for New Construction – 评分问卷', ver:'NC 2021', org:'GBI',
+        url:'https://thegbi.org/green-globes-certification/', checked:'', status:'pending',
+        note:'35/55/70/85% 四档星级为公开口径；各模块权重按公开资料概化，待核官方问卷。' },
   apply:[
     '在 GBI 官网<b>购买评估</b>并开通在线问卷；',
     '完成自评问卷（约数百题），上传证明文件；',
@@ -311,6 +345,9 @@ const SYSTEMS = [
   id:'hqe', cat:'green', abbr:'HQE', name:'HQE',
   region:'法国 · Qualitel / CERWAY', tag:'法国高端',
   tagline:'法国高品质环境建筑。',
+  src:{ doc:'HQE Bâtiment Durable – Référentiel', ver:'现行版', org:'Qualitel / CERWAY',
+        url:'https://www.qualitel.org/', checked:'', status:'pending',
+        note:'本页四大维度权重与等级分值线为概化示例，HQE 官方按 14 个目标评分，须核对现行参考手册。' },
   apply:[
     '向 CERWAY（Qualitel 集团）<b>注册</b>项目，选定 HQE 建筑评价方案；',
     '在 14 个"目标"上选择目标等级并准备证明；',
@@ -338,6 +375,9 @@ const SYSTEMS = [
   id:'cn3star', cat:'green', abbr:'绿建三星', name:'中国绿色建筑三星',
   region:'中国 · GB/T 50378-2019', tag:'国内最主流',
   tagline:'国内官方绿色建筑评价标识，一星 / 二星 / 三星，国内项目最主流。',
+  src:{ doc:'《绿色建筑评价标准》GB/T 50378-2019（2024 年版）', ver:'2019（2024 修订）', org:'住建部 / 中国城科会',
+        url:'https://www.mohurd.gov.cn/', checked:'2026-10-19', status:'verified',
+        note:'已核原文：Q=(Q0+Q1~Q5+QA)/10，Q0=400，一/二/三星 60/70/85 分，每类评分项 ≥ 满分 30%。' },
   apply:[
     '依据 <b>GB/T 50378-2019</b>，向省级住建主管部门或中国城市科学研究会等评价机构申报；',
     '<b>预评价</b>：施工图审查完成后可申请预评价（出预评价报告，不发标识）；',
@@ -369,6 +409,9 @@ const SYSTEMS = [
   id:'fitwel', cat:'health', abbr:'Fitwel', name:'Fitwel',
   region:'美国 · CDC / AMD 发起', tag:'WELL 平价替代',
   tagline:'WELL 最大竞品，同样评估室内空气、采光、运动、心理健康；检测要求比 WELL 轻，成本更低，商业办公常用。',
+  src:{ doc:'Fitwel Scorecard / 认证评分说明', ver:'v3', org:'CfAD（CDC 研究合作）',
+        url:'https://www.fitwel.org/', checked:'', status:'pending',
+        note:'三星期门槛公开资料存在 120 与 125 两种口径（满分 144），待核官方记分卡；本页暂按 125。' },
   apply:[
     '在 Fitwel 官网<b>注册</b>账号与项目（新建 / 既有 / 室内等多版本）；',
     '使用在线<b>记分卡（Scorecard）</b>自评逐项打分；',
@@ -378,8 +421,8 @@ const SYSTEMS = [
   ],
   levels:[
     {name:'1 星', range:'90–104 分', desc:'达标'},
-    {name:'2 星', range:'105–119 分', desc:'良好'},
-    {name:'3 星', range:'≥120 分',   desc:'优秀（满分 144）'}
+    {name:'2 星', range:'105–124 分', desc:'良好'},
+    {name:'3 星', range:'≥125 分',   desc:'优秀（满分 144）'}
   ],
   indicators:[
     ['社区健康植入'],['增加体力活动'],['健康饮食'],['主动通勤'],
@@ -390,13 +433,16 @@ const SYSTEMS = [
     '每项措施不分权重高低，"多做多得"，改造型项目友好；',
     '得分线：90 / 105 / 120 分对应 1–3 星。'
   ],
-  calc:{ type:'total', unit:'分', total:144, note:'满分 144 分，按总分定星。',
-    thresholds:[{min:90,lvl:'1 星'},{min:105,lvl:'2 星'},{min:120,lvl:'3 星'}] }
+  calc:{ type:'total', unit:'分', total:144, note:'满分 144 分；三星期门槛暂按 125，待官方记分卡确认。',
+    thresholds:[{min:90,lvl:'1 星'},{min:105,lvl:'2 星'},{min:125,lvl:'3 星'}] }
 },
 {
   id:'well', cat:'health', abbr:'WELL', name:'WELL（健康建筑标准）',
   region:'美国 · IWBI', tag:'健康建筑标杆',
   tagline:'健康建筑标杆体系，室内人居健康的国际金标准。',
+  src:{ doc:'WELL v2 Certification – 评分与等级规则', ver:'WELL v2', org:'IWBI / GBCI',
+        url:'https://well.support/727d504c-f24c-4b3c-bdd1-1bccf7725c41', checked:'2026-10-19', status:'verified',
+        note:'已核原文：铜 40 / 银 50 / 金 60 / 铂金 80；满分 110（100 特性 + 10 创新）；银/金/铂金分别要求每个概念至少 1/2/3 分，铜级无单概念最低要求。' },
   apply:[
     '在 IWBI <b>注册</b>项目并选定版本（WELL v2）与空间类型；',
     '建议聘请 <b>WELL AP</b> 统筹；',
@@ -417,6 +463,7 @@ const SYSTEMS = [
   scoring:[
     '满分 110 分（100 特性分 + 10 创新分）；每个特性的分值不同，按总分定级；',
     '<b>先决条件（Preconditions）</b>必须全部达成，否则不得授级；',
+    '各等级另有<b>单概念最低分</b>：银级每概念 ≥1 分、金级 ≥2 分、铂金级 ≥3 分（铜级无单概念要求，且仅对 Core 壳核项目开放）；',
     '与 Fitwel 相比：检测要求重（需第三方现场实测）、成本高，但公认度最高。'
   ],
   calc:{ type:'total', unit:'分', total:110, note:'满分 110 分；须先达成全部先决条件。',
@@ -426,6 +473,9 @@ const SYSTEMS = [
   id:'hsr', cat:'health', abbr:'WELL HSR', name:'WELL HSR',
   region:'美国 · IWBI', tag:'健康安全评价',
   tagline:'WELL 健康安全评级，侧重防疫、卫生。',
+  src:{ doc:'WELL Health-Safety Rating – 评分规则', ver:'v2', org:'IWBI',
+        url:'https://www.wellcertified.com/health-safety', checked:'2026-10-19', status:'verified',
+        note:'已核：24 项特性中须达成 15 项（本页按 5 大主题概化勾选）；年度维护。' },
   apply:[
     '面向已注册/已认证 WELL 项目或新申请项目开放；',
     '编制<b>健康安全运营手册</b>（应急计划、清洁规程、空气与水管理、员工沟通等）；',
@@ -441,7 +491,7 @@ const SYSTEMS = [
     ['病患/疑似应对'],['员工健康沟通与服务']
   ],
   scoring:[
-    '采用<b>条款达标制</b>：按主题分组的必备条款逐条达成即可授印，不设总分；',
+    '采用<b>条款达标制</b>：官方为 <b>24 项特性中达成 15 项</b>即可授印，本页按 5 大主题归并展示；',
     '重点在"运营制度"而非硬件改造，可低成本快速落地；',
     '强调年度维持，突出物业持续运营承诺。'
   ],
@@ -465,6 +515,9 @@ const SYSTEMS = [
   id:'cnhealth', cat:'health', abbr:'健康标识', name:'中国健康建筑标识',
   region:'中国 · T/ASC 02 健康建筑评价标准', tag:'国内项目常与绿建三星配套',
   tagline:'国内健康建筑标识，国内项目常与绿建三星配套使用。',
+  src:{ doc:'《健康建筑评价标准》T/ASC 02（2021 版）', ver:'T/ASC 02-2021', org:'中国建筑学会',
+        url:'http://www.chinaasc.org.cn/', checked:'2026-10-19', status:'verified',
+        note:'已核原文：六类指标加权，基本级/一星/二星/三星 = 40/50/60/80 分，每类 ≥30 分；运行评价权重 空气.25/水.20/舒适.25/健身.10/人文.10/服务.10。' },
   apply:[
     '依据中国建筑学会 <b>T/ASC 02《健康建筑评价标准》</b>，向评价管理机构申报；',
     '<b>设计标识</b>：施工图审查通过后可评；<b>运行标识</b>：运行一年后评价（须含"服务"章节）；',
@@ -495,6 +548,10 @@ const SYSTEMS = [
   id:'passive', cat:'spec', abbr:'PHI', name:'Passive House（被动房）',
   region:'德国 · 被动房研究所 PHI', tag:'极致超低能耗',
   tagline:'极致超低能耗建筑。',
+  src:{ doc:'Passive House 认证准则（PHI Criteria）', ver:'PHI 现行准则', org:'Passive House Institute',
+        url:'https://passivehouse.com/02_informations/02_passive-house-requirements/02_passive-house-requirements.htm',
+        checked:'', status:'pending',
+        note:'15 kWh/(㎡·a)、10 W/㎡、n50 ≤0.6/h、PER ≤60 为经典四项；Plus/Premium 的产能门槛（60/120 kWh）待核现行准则。' },
   apply:[
     '聘请 <b>PHI 认证的被动房设计师/咨询机构</b>，使用 <b>PHPP</b> 能耗软件建模；',
     '设计阶段按能耗指标优化围护结构、气密性与新风热回收；',
@@ -537,6 +594,9 @@ const SYSTEMS = [
   id:'nabers', cat:'spec', abbr:'NABERS', name:'NABERS',
   region:'澳大利亚 · NSW 政府管理', tag:'实测运行性能',
   tagline:'建筑实际运行能耗星级（实测性能）。',
+  src:{ doc:'NABERS Energy for Offices – 评级规则', ver:'现行版', org:'NABERS（澳大利亚政府）',
+        url:'https://www.nabers.gov.au/', checked:'', status:'pending',
+        note:'0.5–6 星、实测 12 个月数据为公开口径；各星级对应的实测基准随年度数据集更新，需按最新规则核对。' },
   apply:[
     '面向<b>已运营 ≥12 个月</b>的建筑（办公、酒店、数据中心等）；',
     '聘请 NABERS <b>认证评估师</b>采集 12 个月实测能耗/水/废弃物数据；',
@@ -564,6 +624,9 @@ const SYSTEMS = [
   id:'energystar', cat:'spec', abbr:'ES', name:'ENERGY STAR',
   region:'美国 · EPA 环保署', tag:'能效标识',
   tagline:'美国建筑能效标识。',
+  src:{ doc:'ENERGY STAR Building Certification – 评分规则', ver:'现行版', org:'US EPA',
+        url:'https://www.energystar.gov/buildings', checked:'', status:'pending',
+        note:'75 分门槛与年度复证为公开口径，待核 EPA 现行技术说明。' },
   apply:[
     '在 EPA <b>Portfolio Manager</b> 平台录入建筑 12 个月实测能耗数据；',
     '系统按同类型建筑分布自动给出 <b>1–100 能效得分</b>；',
@@ -589,6 +652,9 @@ const SYSTEMS = [
   id:'sites', cat:'spec', abbr:'SITES', name:'SITES',
   region:'美国 · GBCI', tag:'可持续场地（和 LEED 配套）',
   tagline:'可持续场地景观认证（和 LEED 配套）。',
+  src:{ doc:'SITES v2 Rating System', ver:'SITES v2', org:'GBCI / USGBC',
+        url:'https://www.usgbc.org/sites', checked:'', status:'pending',
+        note:'200+10 分、70/90/110/135 四档为公开口径，待核 v2 评分表。' },
   apply:[
     '在 GBCI（与 LEED 同一审核机构）<b>注册</b>项目；',
     '聘请 <b>SITES AP</b>（可持续场地专业人员）；',
@@ -626,8 +692,7 @@ function levelPill(i,total){
 }
 
 function buildSidebar(){
-  let h='<div class="grp">快速对比</div><a href="#compare" data-anchor>一句话区分</a>';
-  CATS.forEach(c=>{
+  let h='<div class="grp">快速对比</div><a href="#compare" data-anchor>一句话区分</a><a href="#sources" data-anchor>数据核对记录</a>';  CATS.forEach(c=>{
     h+=`<div class="grp">${c.name}</div>`;
     SYSTEMS.filter(s=>s.cat===c.id).forEach(s=>{
       h+=`<a href="#cert-${s.id}" data-anchor>${s.abbr} · ${s.name.split('（')[0]}</a>`;
@@ -637,6 +702,42 @@ function buildSidebar(){
 }
 
 function catOf(id){return CATS.find(c=>c.id===id);}
+
+/* 依据与核对状态条 */
+function srcLine(s){
+  const st=s.src.status==='verified'
+    ? `<span class="st ok">✓ 已核对官方原文 ${s.src.checked}</span>`
+    : `<span class="st warn">△ 待复核原文</span>`;
+  return `<div class="src-line">📚 依据：<b>${s.src.doc}</b> · ${s.src.ver} · ${s.src.org}
+    <a href="${s.src.url}" target="_blank" rel="noopener">官方原文 ↗</a> ${st}</div>`;
+}
+
+/* 数据核对记录表 */
+function sourcesHTML(){
+  const okN=SYSTEMS.filter(s=>s.src.status==='verified').length;
+  const rows=SYSTEMS.map(s=>{
+    const ok=s.src.status==='verified';
+    return `<tr>
+      <td>${s.abbr}</td>
+      <td>${s.src.doc}</td>
+      <td>${s.src.ver}</td>
+      <td>${s.src.checked||'—'}</td>
+      <td>${ok?'<span class="st ok">已核对</span>':'<span class="st warn">待复核</span>'}</td>
+      <td><a href="${s.src.url}" target="_blank" rel="noopener">原文</a></td>
+    </tr>`;
+  }).join('');
+  return `<section class="compare" id="sources">
+    <h2>📚 数据核对记录</h2>
+    <p class="src-intro">共 <b>${SYSTEMS.length}</b> 个体系，已核对官方原文 <b>${okN}</b> 个，待复核 <b>${SYSTEMS.length-okN}</b> 个。
+      最近整体复核：<b>2026-10-19</b>（联网比对官方标准 / 手册原文）；下次自动复核：<b>每月 1 日</b>。</p>
+    <table class="tbl">
+      <tr><th>体系</th><th>依据文件</th><th>版本</th><th>最近核对</th><th>状态</th><th>来源</th></tr>
+      ${rows}
+    </table>
+    <div class="note">复核口径：以认证机构官网发布的现行手册 / 标准原文为准，逐项比对"等级分数线、指标权重、满分与硬性门槛"。
+      若官方发布新版本，先在本表登记版本变更，再更新卡片数据与计算器。</div>
+  </section>`;
+}
 
 function renderMain(filter=''){
   const kw=filter.trim().toLowerCase();
@@ -652,7 +753,7 @@ function renderMain(filter=''){
     h+='</section>';
   });
   if(!h) h='<div class="empty">没有匹配的认证体系，换个关键词试试。</div>';
-  $('#main').innerHTML=cmpHTML()+h;
+  $('#main').innerHTML=cmpHTML()+h+(kw?'':sourcesHTML());
   bindEvents();
 }
 
@@ -690,6 +791,7 @@ function certHTML(s){
     </div>
     <div class="cert-body">
       <p class="tagline">${s.tagline}</p>
+      ${srcLine(s)}
       <div class="tabs">
         <button data-tab="apply" class="active">📋 参评办法</button>
         <button data-tab="levels">🏅 等级与评价指标</button>
@@ -733,7 +835,7 @@ function calcHTML(s){
       inner+=`<div class="calc-item"><label>创新 / 加分</label><input type="number" min="0" max="${k.total - s.indicators.reduce((a,b)=>a+b[1],0)>0?k.total - s.indicators.reduce((a,b)=>a+b[1],0):0}" value="0" data-ci="${s.indicators.length}"><span class="max">上限视体系而定</span></div>`;
     }
   } else if(k.type==='total'){
-    inner=`<div class="calc-item"><label>总分（${k.unit}）</label><input type="number" min="0" max="${k.total}" value="0" data-ci="0"><span class="max">满分 ${k.total}</span></div>`;
+    inner=`<div class="calc-item"><label>${k.label||('总分（'+k.unit+'）')}</label><input type="number" min="0" max="${k.total}" value="0" data-ci="0"><span class="max">上限 ${k.total}</span></div>`;
   } else if(k.type==='check'){
     inner=k.items.map((it,i)=>`<label class="chk-item"><input type="checkbox" data-ck="${it.k}"><span>${it.label}${it.small?`<small>${it.small}</small>`:''}</span></label>`).join('');
   } else if(k.type==='nabers'){

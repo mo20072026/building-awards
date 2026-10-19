@@ -21,7 +21,10 @@ const doc = window.document;
 ok(doc.querySelectorAll('.sidebar a').length > 15, '侧栏链接数');
 ok(doc.querySelectorAll('.cert').length === 19, '认证卡片数 = 19');
 ok(doc.querySelector('#compare'), '对比区存在且唯一');
-ok(doc.querySelectorAll('.compare').length === 1, '对比区不重复');
+ok(doc.querySelectorAll('[id="compare"]').length === 1, '对比区不重复');
+ok(doc.querySelector('#sources'), '数据核对记录区存在');
+ok(doc.querySelectorAll('#sources tbody tr, #sources tr').length >= 20, '核对记录覆盖全部体系');
+ok(doc.querySelectorAll('.src-line').length === 19, '每个体系都有依据行');
 
 // 2. 展开卡片 + 选项卡（LEED/三星默认已展开，用 BREEAM 测试切换）
 doc.querySelector('[data-toggle="breeam"]').click();
