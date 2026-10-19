@@ -9,3 +9,6 @@ Thumbs.db
 # 百度网盘同步临时文件
 *.baiduyun.uploading.cfg
 *.baiduyun.*
+
+# 临时抓取/调试目录（勿提交，注意别把大文件推上去）
+.tmp/
