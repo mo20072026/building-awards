@@ -237,9 +237,9 @@ const SYSTEMS = [
   id:'greenstar', cat:'green', abbr:'GS', name:'Green Star',
   region:'澳大利亚 · GBCA', tag:'澳新主流',
   tagline:'澳新主流绿建体系。',
-  src:{ doc:'Green Star Buildings / Performance 技术手册', ver:'Buildings v1 / Performance', org:'GBCA',
-        url:'https://new.gbca.org.au/green-star/rating-system/', checked:'', status:'pending',
-        note:'45/60/75 分对应 4/5/6 星为公开口径；各章节权重按 v1 手册概化，待逐表核对。' },
+  src:{ doc:'Green Star Buildings v1.1 提交指南（Submission Guidelines Rev A）', ver:'Buildings v1.1', org:'GBCA（澳大利亚绿建委员会）',
+        url:'https://www.gbca.au/green-star-buildings-v1-1', checked:'2026-10-19', status:'verified',
+        note:'已核官方：v1 已于 2026-04-30 停止注册，2026-05-01 起新项目须注册 v1.1；全部 Minimum Expectations 达标后方可计分，4/5/6 星 = 15/35/70 分（满分 100）。' },
   apply:[
     '向澳洲绿建委员会（GBCA）<b>注册</b>并选择评价工具（Performance 运营版 / Buildings 新建版）；',
     '聘请 GBCA 认可的<b>独立评审员</b>；',
@@ -247,21 +247,22 @@ const SYSTEMS = [
     'GBCA 评审并授星（运营版基于 12 个月实测数据）。'
   ],
   levels:[
-    {name:'4 星', range:'45–59 分', desc:'最佳实践（Best Practice）'},
-    {name:'5 星', range:'60–74 分', desc:'澳洲卓越（Australian Excellence）'},
-    {name:'6 星', range:'≥75 分',   desc:'世界领先（World Leadership）'}
+    {name:'4 星', range:'≥15 分（且全部 Minimum Expectations 达标）', desc:'最佳实践（Best Practice）'},
+    {name:'5 星', range:'≥35 分', desc:'澳洲卓越（Australian Excellence）'},
+    {name:'6 星', range:'≥70 分（满分 100）',   desc:'世界领先（World Leadership）'}
   ],
   indicators:[
-    ['管理',20],['室内环境质量',20],['能源',20],['交通',8],['水',12],
-    ['材料',10],['土地与生态',5],['排放',5]
+    ['Responsible 责任建造'],['Healthy 健康'],['Resilient 韧性'],['Positive 正向贡献'],
+    ['Places 场所'],['People 人文'],['Nature 自然']
   ],
   scoring:[
-    '百分制累加计分，按分值定星；',
-    '低于 45 分一般不授予认证星级；',
-    '权重为概化值，实际按现行技术手册执行。'
+    '先满足<b>全部 Minimum Expectations（15 项强制信用）</b>，这些强制项不计分，之后才按信用得分定星；',
+    '星级门槛为 <b>15 / 35 / 70 分</b>（满分 100），不是旧版 Design & As Built 的 45/60/75；',
+    '5 星及以上须走<b>气候正向路径（Climate Positive Pathway）</b>：全电、可再生供电、低隐含碳等；',
+    'Leadership 类别另有额外信用分，可叠加在 100 分核心之外。'
   ],
-  calc:{ type:'total', unit:'分', total:100, note:'低于 45 分通常不授星。',
-    thresholds:[{min:45,lvl:'4 星 · 最佳实践'},{min:60,lvl:'5 星 · 澳洲卓越'},{min:75,lvl:'6 星 · 世界领先'}] }
+  calc:{ type:'total', unit:'分', total:100, note:'满分 100 分；须先满足全部 Minimum Expectations，门槛 15/35/70。',
+    thresholds:[{min:15,lvl:'4 星 · 最佳实践'},{min:35,lvl:'5 星 · 澳洲卓越'},{min:70,lvl:'6 星 · 世界领先'}] }
 },
 {
   id:'lbc', cat:'green', abbr:'LBC', name:'Living Building Challenge',
@@ -548,10 +549,10 @@ const SYSTEMS = [
   id:'passive', cat:'spec', abbr:'PHI', name:'Passive House（被动房）',
   region:'德国 · 被动房研究所 PHI', tag:'极致超低能耗',
   tagline:'极致超低能耗建筑。',
-  src:{ doc:'Passive House 认证准则（PHI Criteria）', ver:'PHI 现行准则', org:'Passive House Institute',
-        url:'https://passivehouse.com/02_informations/02_passive-house-requirements/02_passive-house-requirements.htm',
-        checked:'', status:'pending',
-        note:'15 kWh/(㎡·a)、10 W/㎡、n50 ≤0.6/h、PER ≤60 为经典四项；Plus/Premium 的产能门槛（60/120 kWh）待核现行准则。' },
+  src:{ doc:'Passive House 建筑认证准则（Building Criteria, Version 10c）', ver:'10c（2023）', org:'Passive House Institute（PHI）',
+        url:'https://passiv.de/en/02_informations/02_passive-house-requirements/02_passive-house-requirements.htm',
+        checked:'2026-10-19', status:'verified',
+        note:'已核官方准则表 1：采暖需求 ≤15 kWh/(㎡·a) 或采暖负荷 ≤10 W/㎡（替代准则，二者取一）；气密 n50 ≤0.6/h；PER 需求 Classic ≤60、Plus ≤45、Premium ≤30；可再生发电 Plus ≥60、Premium ≥120，允许 ±15 偏差并以额外发电补偿。' },
   apply:[
     '聘请 <b>PHI 认证的被动房设计师/咨询机构</b>，使用 <b>PHPP</b> 能耗软件建模；',
     '设计阶段按能耗指标优化围护结构、气密性与新风热回收；',
@@ -559,34 +560,37 @@ const SYSTEMS = [
     '提交 PHPP 计算书 + 现场测试报告，由 PHI 或其授权机构审核授证。'
   ],
   levels:[
-    {name:'Classic 经典', range:'四项能耗指标达标', desc:'标准被动房'},
-    {name:'Plus',        range:'+ 可再生能源产出 ≥60 kWh/(㎡·a)', desc:'产能进阶'},
-    {name:'Premium',     range:'+ 可再生能源产出 ≥120 kWh/(㎡·a)', desc:'正产能建筑'}
+    {name:'Classic 经典', range:'PER ≤60，无发电要求', desc:'标准被动房'},
+    {name:'Plus',        range:'PER ≤45 + 可再生能源产出 ≥60 kWh/(㎡·a)', desc:'产能进阶'},
+    {name:'Premium',     range:'PER ≤30 + 可再生能源产出 ≥120 kWh/(㎡·a)', desc:'正产能建筑'}
   ],
   indicators:[
-    ['采暖需求 ≤15 kWh/(㎡·a)',15],['采暖负荷 ≤10 W/㎡',10],
-    ['气密性 n50 ≤0.6 /h',0],['一次能源（可再生）PER ≤60 kWh/(㎡·a)',60]
+    ['采暖需求 ≤15 kWh/(㎡·a)（或采暖负荷 ≤10 W/㎡，二选一）'],
+    ['气密性 n50 ≤0.6 /h'],
+    ['PER 需求：Classic ≤60 / Plus ≤45 / Premium ≤30 kWh/(㎡·a)'],
+    ['可再生能源发电：Plus ≥60 / Premium ≥120 kWh/(㎡·a)']
   ],
   scoring:[
-    '不打分，采用<b>硬指标达标制</b>：采暖需求、采暖负荷、气密性、PER 四项须全部满足；',
-    '在 Classic 基础上按可再生能源设备产出划分 Plus / Premium；',
-    '制冷需求、湿度等亦有相应限值（视气候区）。'
+    '不打分，采用<b>硬指标达标制</b>：采暖（需求或负荷满足其一）、气密性、PER 三项须全部满足；',
+    'Classic / Plus / Premium 按 <b>PER 需求上限 + 可再生能源发电量</b>共同划分：(60, —)、(45, 60)、(30, 120)；',
+    'PER 允许 ±15 kWh/(㎡·a) 偏差，但须以额外发电量补偿；制冷需求、湿度等另有限值（视气候区）。'
   ],
   calc:{ type:'check', title:'核心能耗指标（达标请勾选）',
     items:[
-      {k:'h',label:'采暖需求 ≤15 kWh/(㎡·a)',small:'PHPP 计算的年采暖需求'},
-      {k:'l',label:'采暖负荷 ≤10 W/㎡',small:'极端天气下的峰值热负荷'},
+      {k:'h',label:'采暖需求 ≤15 kWh/(㎡·a) 或采暖负荷 ≤10 W/㎡',small:'官方两项替代准则，满足其一即可'},
       {k:'a',label:'气密性 n50 ≤0.6 /h',small:'鼓风门实测结果'},
-      {k:'p',label:'一次能源（可再生）PER ≤60 kWh/(㎡·a)'},
-      {k:'r60',label:'可再生能源设备产出 ≥60 kWh/(㎡·a)',small:'光伏等年产能（影响 Plus/Premium）'},
-      {k:'r120',label:'可再生能源设备产出 ≥120 kWh/(㎡·a)'}
+      {k:'p60',label:'PER 需求 ≤60 kWh/(㎡·a)',small:'Classic 门槛'},
+      {k:'p45',label:'PER 需求 ≤45 kWh/(㎡·a)',small:'Plus 门槛'},
+      {k:'p30',label:'PER 需求 ≤30 kWh/(㎡·a)',small:'Premium 门槛'},
+      {k:'r60',label:'可再生能源设备产出 ≥60 kWh/(㎡·a)',small:'Plus 门槛'},
+      {k:'r120',label:'可再生能源设备产出 ≥120 kWh/(㎡·a)',small:'Premium 门槛'}
     ],
     result(c){
-      if(!(c.h&&c.l&&c.a&&c.p))
-        return {ok:false, txt:'❌ 四项核心指标（采暖需求/采暖负荷/气密性/PER）须<b>全部达标</b>方可获得被动房认证。'};
-      if(c.r120) return {ok:true, txt:'🏆 核心指标全部达标 + 可再生能源产出 ≥120 → 可认证 <b>Premium</b>（正产能建筑）。'};
-      if(c.r60)  return {ok:true, txt:'✅ 核心指标全部达标 + 可再生能源产出 ≥60 → 可认证 <b>Plus</b>。'};
-      return {ok:true, txt:'✅ 四项核心指标全部达标 → 可认证 <b>Classic 经典被动房</b>。'};
+      if(!(c.h&&c.a&&c.p60))
+        return {ok:false, txt:'❌ 核心指标未全达标：采暖（需求或负荷）、气密性 n50、PER ≤60 须同时满足，方可获得被动房认证。'};
+      if(c.p30&&c.r120) return {ok:true, txt:'🏆 PER ≤30 + 可再生能源产出 ≥120 → 可认证 <b>Premium</b>（正产能建筑）。'};
+      if(c.p45&&c.r60)  return {ok:true, txt:'✅ PER ≤45 + 可再生能源产出 ≥60 → 可认证 <b>Plus</b>。'};
+      return {ok:true, txt:'✅ 核心条件达标（PER ≤60、无发电要求）→ 可认证 <b>Classic 经典被动房</b>。'};
     }
   }
 },
@@ -594,9 +598,10 @@ const SYSTEMS = [
   id:'nabers', cat:'spec', abbr:'NABERS', name:'NABERS',
   region:'澳大利亚 · NSW 政府管理', tag:'实测运行性能',
   tagline:'建筑实际运行能耗星级（实测性能）。',
-  src:{ doc:'NABERS Energy for Offices – 评级规则', ver:'现行版', org:'NABERS（澳大利亚政府）',
-        url:'https://www.nabers.gov.au/', checked:'', status:'pending',
-        note:'0.5–6 星、实测 12 个月数据为公开口径；各星级对应的实测基准随年度数据集更新，需按最新规则核对。' },
+  src:{ doc:'NABERS Energy and Water for Offices — Rules v5.1', ver:'Rules v5.1（现行）', org:'NABERS（澳大利亚政府）',
+        url:'https://www.nabers.gov.au/sites/default/files/2023-06/nabers_energy_and_water_for_offices_v5.1.pdf',
+        checked:'2026-10-19', status:'verified',
+        note:'已核官方：1–6 星、半星递增（0 星表示远低于平均、不列入正式刻度）；6 星=最佳市场实践，约为 5 星排放的一半；按 12 个月实测数据与同类基准比对，评级有效期 12 个月。' },
   apply:[
     '面向<b>已运营 ≥12 个月</b>的建筑（办公、酒店、数据中心等）；',
     '聘请 NABERS <b>认证评估师</b>采集 12 个月实测能耗/水/废弃物数据；',
@@ -604,19 +609,19 @@ const SYSTEMS = [
     '授星并载入公开注册名录，有效期约 1 年，可持续复评。'
   ],
   levels:[
-    {name:'6 星', desc:'市场领先（楼宇性能居同类前 6% 左右）'},
+    {name:'6 星', desc:'市场领先（最佳市场实践，约为 5 星排放的一半）'},
     {name:'5 星', desc:'优秀'},
     {name:'4 星', desc:'良好（同类平均水平之上）'},
-    {name:'3 星', desc:'同类平均水平'},
+    {name:'3 星', desc:'同类平均'},
     {name:'2 星及以下', desc:'落后于同类均值'}
   ],
   indicators:[
     ['能耗（Energy）'],['水（Water）'],['废弃物（Waste）'],['室内环境（IEQ）']
   ],
   scoring:[
-    '以<b>实测数据</b>而非设计值评级，0.5 星为最小刻度（0.5–6 星）；',
-    '排名式评级：得分取决于与同类建筑年际数据比较的相对位置；',
-    '可按"整楼"或"租户部分"分别评级。'
+    '以<b>实测数据</b>而非设计值评级：<b>1–6 星、半星递增</b>；0 星表示远低于平均、不列入正式刻度；',
+    '排名式评级：得分取决于与同类建筑年度数据的相对位置（基准按年度数据集更新）；',
+    '可按"整楼""基座建筑"或"租户部分"分别评级，评级有效期 12 个月。'
   ],
   calc:{ type:'nabers' }
 },
@@ -624,13 +629,13 @@ const SYSTEMS = [
   id:'energystar', cat:'spec', abbr:'ES', name:'ENERGY STAR',
   region:'美国 · EPA 环保署', tag:'能效标识',
   tagline:'美国建筑能效标识。',
-  src:{ doc:'ENERGY STAR Building Certification – 评分规则', ver:'现行版', org:'US EPA',
-        url:'https://www.energystar.gov/buildings', checked:'', status:'pending',
-        note:'75 分门槛与年度复证为公开口径，待核 EPA 现行技术说明。' },
+  src:{ doc:'ENERGY STAR Certification for Buildings（EPA 官方评分与认证规则）', ver:'现行', org:'US EPA',
+        url:'https://www.energystar.gov/buildings/building-recognition/building-certification', checked:'2026-10-19', status:'verified',
+        note:'已核官方：Portfolio Manager 1–100 分，≥75 分（优于同类至少 75%）方可申请；须由 PE 或注册建筑师（RA）核证，逐年复证。' },
   apply:[
     '在 EPA <b>Portfolio Manager</b> 平台录入建筑 12 个月实测能耗数据；',
     '系统按同类型建筑分布自动给出 <b>1–100 能效得分</b>；',
-    '得分 ≥75 可申请认证，并由<b>注册工程师（PE/CES）</b>核查数据；',
+    '得分 ≥75 可申请认证，并由<b>注册工程师（PE）或注册建筑师（RA）</b>核证数据；',
     '审核通过授证，<b>每年更新</b>维持。'
   ],
   levels:[
@@ -652,9 +657,9 @@ const SYSTEMS = [
   id:'sites', cat:'spec', abbr:'SITES', name:'SITES',
   region:'美国 · GBCI', tag:'可持续场地（和 LEED 配套）',
   tagline:'可持续场地景观认证（和 LEED 配套）。',
-  src:{ doc:'SITES v2 Rating System', ver:'SITES v2', org:'GBCI / USGBC',
-        url:'https://www.usgbc.org/sites', checked:'', status:'pending',
-        note:'200+10 分、70/90/110/135 四档为公开口径，待核 v2 评分表。' },
+  src:{ doc:'SITES v2 Rating System（200 分制评分体系）', ver:'SITES v2', org:'GBCI / USGBC / ASLA',
+        url:'https://sustainablesites.org/certification-guide', checked:'2026-10-19', status:'verified',
+        note:'已核官方：200 分制，四档 70 / 85 / 100 / 135 分；18 项先决条件不计分；另有最多 9 分"创新或优良表现"加分（此前误作 200+10 分、85/100 写成 90/110）。' },
   apply:[
     '在 GBCI（与 LEED 同一审核机构）<b>注册</b>项目；',
     '聘请 <b>SITES AP</b>（可持续场地专业人员）；',
@@ -662,21 +667,23 @@ const SYSTEMS = [
     '分阶段（设计 / 施工）提交审核，通过后授证。'
   ],
   levels:[
-    {name:'Certified 认证', range:'70–89 分', desc:'入门'},
-    {name:'Silver 银级',    range:'90–109 分', desc:'常规'},
-    {name:'Gold 金级',      range:'110–134 分', desc:'主流目标'},
+    {name:'Certified 认证', range:'70–84 分', desc:'入门'},
+    {name:'Silver 银级',    range:'85–99 分', desc:'常规'},
+    {name:'Gold 金级',      range:'100–134 分', desc:'主流目标'},
     {name:'Platinum 铂金级', range:'≥135 分', desc:'标杆'}
   ],
   indicators:[
-    ['场地背景与前决条件'],['预先设计'],['场地设计'],['施工'],['运营维护'],['监测与创新']
+    ['场地环境（Site Context）'],['设计前评估与规划'],['场地设计 — 水'],['场地设计 — 土壤与植被'],
+    ['场地设计 — 材料'],['场地设计 — 人体健康'],['施工'],['运营与维护'],['教育与绩效监测'],['创新或优良表现（加分 9 分）']
   ],
   scoring:[
-    '满分 200 分 + 10 分超额加分，先决条件必须全部满足；',
-    '核心评价：土壤与植被保护、雨水管理、景观节水和生态修复；',
+    '满分 <b>200 分</b>，18 项<b>先决条件（Prerequisites）</b>不计分但必须全部满足；',
+    '四档分数线：Certified 70 / Silver 85 / Gold 100 / Platinum 135；',
+    '"创新或优良表现"另设最多 <b>9 分</b>加分，可计入总分冲档；',
     '与 LEED 得分点可互相支持，常见"LEED + SITES"组合申报。'
   ],
-  calc:{ type:'total', unit:'分', total:210, note:'满分 200+10 分；先决条件须全部满足。',
-    thresholds:[{min:70,lvl:'Certified 认证'},{min:90,lvl:'Silver 银级'},{min:110,lvl:'Gold 金级'},{min:135,lvl:'Platinum 铂金级'}] }
+  calc:{ type:'total', unit:'分', total:200, note:'满分 200 分（另有最多 9 分创新加分）；先决条件须全部满足。',
+    thresholds:[{min:70,lvl:'Certified 认证'},{min:85,lvl:'Silver 银级'},{min:100,lvl:'Gold 金级'},{min:135,lvl:'Platinum 铂金级'}] }
 }
 ];
 
@@ -972,7 +979,7 @@ function bindEvents(){
     const upd=()=>{
       const v=+slider.value;
       document.getElementById('nabers-v').textContent=v.toFixed(1)+' ★';
-      const desc= v>=6?'市场领先（前 6% 左右）':v>=5?'优秀':v>=4?'良好（高于同类均值）':v>=3?'同类平均水平':v>0?'低于同类均值':'未评级';
+      const desc= v>=6?'市场领先（最佳市场实践）':v>=5?'优秀':v>=4?'良好（高于同类均值）':v>=3?'同类平均':v>0?'低于同类均值':'未评级';
       renderOut('nabers',`<span class="score">${v.toFixed(1)} ★</span><span class="lvl ${v>=6?'high':v>=4?'mid':'low'}">${desc}</span>`);
     };
     slider.addEventListener('input',upd); upd();
