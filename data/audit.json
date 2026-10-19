@@ -1,0 +1,486 @@
+{
+  "generated_at": "2026-10-19 18:15:25",
+  "generated_at_iso": "2026-10-19T18:15:25+0800",
+  "generator": "auto_check.py · L3 官方源巡检",
+  "mode": "live",
+  "baseline_updated": "2026-10-19",
+  "baseline_age_days": 0,
+  "max_age_days": 45,
+  "baseline_expired": false,
+  "summary": {
+    "ok": 17,
+    "changed": 0,
+    "unreachable": 2,
+    "no_source": 0,
+    "seeded": 0,
+    "total": 19
+  },
+  "systems": [
+    {
+      "id": "leed",
+      "abbr": "LEED",
+      "status": "ok",
+      "partial": false,
+      "checked_at": "2026-10-19",
+      "method": "官方原文比对（人工核读）",
+      "sources": [
+        {
+          "url": "https://www.usgbc.org/leed/v41",
+          "http": 200,
+          "bytes": 111352,
+          "error": null,
+          "fetched_at": "2026-10-19T17:42:50+0800",
+          "from_cache": true,
+          "hash": "20baca994c887c3f",
+          "baseline_hash": "20baca994c887c3f",
+          "changed": false,
+          "ssl_unverified": false
+        },
+        {
+          "url": "https://www.usgbc.org/leed/v5",
+          "http": 200,
+          "bytes": 162926,
+          "error": null,
+          "fetched_at": "2026-10-19T18:00:12+0800",
+          "from_cache": true,
+          "hash": "03b560a435538a80",
+          "baseline_hash": "03b560a435538a80",
+          "changed": false,
+          "ssl_unverified": false
+        }
+      ]
+    },
+    {
+      "id": "breeam",
+      "abbr": "BREEAM",
+      "status": "ok",
+      "partial": true,
+      "checked_at": "2026-10-19",
+      "method": "官方原文比对（人工核读）",
+      "sources": [
+        {
+          "url": "https://files.bregroup.com/breeam/technicalmanuals/NC2018/content/",
+          "http": null,
+          "bytes": 0,
+          "error": "http-403",
+          "fetched_at": null,
+          "from_cache": false,
+          "hash": null,
+          "baseline_hash": null,
+          "changed": false,
+          "ssl_unverified": false
+        },
+        {
+          "url": "https://www.breeam.com/",
+          "http": 200,
+          "bytes": 355835,
+          "error": null,
+          "fetched_at": "2026-10-19T17:43:09+0800",
+          "from_cache": true,
+          "hash": "d3ab5747d743e082",
+          "baseline_hash": "d3ab5747d743e082",
+          "changed": false,
+          "ssl_unverified": false
+        }
+      ]
+    },
+    {
+      "id": "dgnb",
+      "abbr": "DGNB",
+      "status": "ok",
+      "partial": false,
+      "checked_at": "2026-10-19",
+      "method": "官方原文比对（人工核读）",
+      "sources": [
+        {
+          "url": "https://www.dgnb-system.de/en/",
+          "http": 200,
+          "bytes": 121427,
+          "error": null,
+          "fetched_at": "2026-10-19T18:00:23+0800",
+          "from_cache": true,
+          "hash": "a937e020e02c691d",
+          "baseline_hash": "a937e020e02c691d",
+          "changed": false,
+          "ssl_unverified": true
+        }
+      ]
+    },
+    {
+      "id": "greenmark",
+      "abbr": "GM",
+      "status": "ok",
+      "partial": true,
+      "checked_at": "2026-10-19",
+      "method": "官方原文比对（人工核读）",
+      "sources": [
+        {
+          "url": "https://www1.bca.gov.sg/docs/default-source/docs-corp-buildsg/sustainability/20240101_certification_standard_r2.pdf",
+          "http": 200,
+          "bytes": 491614,
+          "error": "pdf-parse-error:PdfStreamError",
+          "fetched_at": "2026-10-19T17:48:48+0800",
+          "from_cache": true,
+          "hash": null,
+          "baseline_hash": null,
+          "changed": false,
+          "ssl_unverified": false
+        },
+        {
+          "url": "https://www1.bca.gov.sg/buildsg/sustainability",
+          "http": 200,
+          "bytes": 491614,
+          "error": null,
+          "fetched_at": "2026-10-19T18:04:44+0800",
+          "from_cache": true,
+          "hash": "483b50ffdd03c1ce",
+          "baseline_hash": "483b50ffdd03c1ce",
+          "changed": false,
+          "ssl_unverified": false
+        }
+      ]
+    },
+    {
+      "id": "beam",
+      "abbr": "BEAM",
+      "status": "ok",
+      "partial": false,
+      "checked_at": "2026-10-19",
+      "method": "官方原文比对（人工核读）",
+      "sources": [
+        {
+          "url": "https://www.hkgbc.org.hk/eng/beam-plus/beam-plus-references/manuals-assessment/ManualsFiles/BEAMPlus-NBV2-2021-EN.pdf",
+          "http": 200,
+          "bytes": 8985669,
+          "error": null,
+          "fetched_at": "2026-10-19T17:48:55+0800",
+          "from_cache": true,
+          "hash": "d601be33817d6227",
+          "baseline_hash": "d601be33817d6227",
+          "changed": false,
+          "ssl_unverified": false
+        }
+      ]
+    },
+    {
+      "id": "edge",
+      "abbr": "EDGE",
+      "status": "ok",
+      "partial": false,
+      "checked_at": "2026-10-19",
+      "method": "官方原文比对（人工核读）",
+      "sources": [
+        {
+          "url": "https://edgebuildings.com/certify/",
+          "http": 200,
+          "bytes": 123674,
+          "error": null,
+          "fetched_at": "2026-10-19T17:48:56+0800",
+          "from_cache": true,
+          "hash": "05beb674a6b7fe87",
+          "baseline_hash": "05beb674a6b7fe87",
+          "changed": false,
+          "ssl_unverified": false
+        }
+      ]
+    },
+    {
+      "id": "greenstar",
+      "abbr": "GS",
+      "status": "ok",
+      "partial": false,
+      "checked_at": "2026-10-19",
+      "method": "官方原文比对（人工核读）",
+      "sources": [
+        {
+          "url": "https://www.gbca.au/green-star-buildings-v1-1",
+          "http": 200,
+          "bytes": 219328,
+          "error": null,
+          "fetched_at": "2026-10-19T17:48:58+0800",
+          "from_cache": true,
+          "hash": "d52c06799567a72f",
+          "baseline_hash": "d52c06799567a72f",
+          "changed": false,
+          "ssl_unverified": false
+        }
+      ]
+    },
+    {
+      "id": "lbc",
+      "abbr": "LBC",
+      "status": "ok",
+      "partial": false,
+      "checked_at": "2026-10-19",
+      "method": "官方原文比对（人工核读）",
+      "sources": [
+        {
+          "url": "https://living-future.org/lbc/",
+          "http": 200,
+          "bytes": 183771,
+          "error": null,
+          "fetched_at": "2026-10-19T17:43:24+0800",
+          "from_cache": true,
+          "hash": "aaf874eab98e714d",
+          "baseline_hash": "aaf874eab98e714d",
+          "changed": false,
+          "ssl_unverified": false
+        }
+      ]
+    },
+    {
+      "id": "greenglobes",
+      "abbr": "GG",
+      "status": "ok",
+      "partial": true,
+      "checked_at": "2026-10-19",
+      "method": "官方原文比对（人工核读）",
+      "sources": [
+        {
+          "url": "https://thegbi.org/green-globes-certification/",
+          "http": null,
+          "bytes": 0,
+          "error": "http-403",
+          "fetched_at": null,
+          "from_cache": false,
+          "hash": null,
+          "baseline_hash": null,
+          "changed": false,
+          "ssl_unverified": false
+        },
+        {
+          "url": "https://thegbi.org/",
+          "http": 200,
+          "bytes": 294801,
+          "error": null,
+          "fetched_at": "2026-10-19T17:56:09+0800",
+          "from_cache": true,
+          "hash": "439d1ef6f70bd869",
+          "baseline_hash": "439d1ef6f70bd869",
+          "changed": false,
+          "ssl_unverified": false
+        }
+      ]
+    },
+    {
+      "id": "hqe",
+      "abbr": "HQE",
+      "status": "ok",
+      "partial": false,
+      "checked_at": "2026-10-19",
+      "method": "官方原文比对（人工核读）",
+      "sources": [
+        {
+          "url": "https://www.qualitel.org/",
+          "http": 200,
+          "bytes": 101286,
+          "error": null,
+          "fetched_at": "2026-10-19T17:49:01+0800",
+          "from_cache": true,
+          "hash": "1c86a42c0c78bb0a",
+          "baseline_hash": "1c86a42c0c78bb0a",
+          "changed": false,
+          "ssl_unverified": false
+        }
+      ]
+    },
+    {
+      "id": "cn3star",
+      "abbr": "绿建三星",
+      "status": "unreachable",
+      "partial": true,
+      "checked_at": "2026-10-19",
+      "method": "官方原文比对（人工核读）",
+      "sources": [
+        {
+          "url": "https://www.mohurd.gov.cn/",
+          "http": null,
+          "bytes": 0,
+          "error": "URLError:<urlopen error [SSL: UNEXPECTED_EOF_WHIL",
+          "fetched_at": null,
+          "from_cache": false,
+          "hash": null,
+          "baseline_hash": null,
+          "changed": false,
+          "ssl_unverified": false
+        }
+      ]
+    },
+    {
+      "id": "fitwel",
+      "abbr": "Fitwel",
+      "status": "ok",
+      "partial": false,
+      "checked_at": "2026-10-19",
+      "method": "官方原文比对（人工核读）",
+      "sources": [
+        {
+          "url": "https://www.fitwel.org/",
+          "http": 200,
+          "bytes": 877537,
+          "error": null,
+          "fetched_at": "2026-10-19T17:44:34+0800",
+          "from_cache": true,
+          "hash": "964cf4058ade714e",
+          "baseline_hash": "964cf4058ade714e",
+          "changed": false,
+          "ssl_unverified": false
+        }
+      ]
+    },
+    {
+      "id": "well",
+      "abbr": "WELL",
+      "status": "ok",
+      "partial": false,
+      "checked_at": "2026-10-19",
+      "method": "官方原文比对（人工核读）",
+      "sources": [
+        {
+          "url": "https://well.support/727d504c-f24c-4b3c-bdd1-1bccf7725c41",
+          "http": 200,
+          "bytes": 124820,
+          "error": null,
+          "fetched_at": "2026-10-19T17:49:49+0800",
+          "from_cache": true,
+          "hash": "73a319c3405bfa16",
+          "baseline_hash": "73a319c3405bfa16",
+          "changed": false,
+          "ssl_unverified": false
+        }
+      ]
+    },
+    {
+      "id": "hsr",
+      "abbr": "WELL HSR",
+      "status": "ok",
+      "partial": false,
+      "checked_at": "2026-10-19",
+      "method": "官方原文比对（人工核读）",
+      "sources": [
+        {
+          "url": "https://www.wellcertified.com/health-safety",
+          "http": 200,
+          "bytes": 3749,
+          "error": "page-too-short(maybe-js)",
+          "fetched_at": "2026-10-19T17:49:50+0800",
+          "from_cache": true,
+          "hash": "f80a97bf30eb2920",
+          "baseline_hash": "f80a97bf30eb2920",
+          "changed": false,
+          "ssl_unverified": false
+        }
+      ]
+    },
+    {
+      "id": "cnhealth",
+      "abbr": "健康标识",
+      "status": "ok",
+      "partial": false,
+      "checked_at": "2026-10-19",
+      "method": "官方原文比对（人工核读）",
+      "sources": [
+        {
+          "url": "http://www.chinaasc.org.cn/",
+          "http": 200,
+          "bytes": 81376,
+          "error": null,
+          "fetched_at": "2026-10-19T17:52:34+0800",
+          "from_cache": true,
+          "hash": "fdbafba07effeb5d",
+          "baseline_hash": "fdbafba07effeb5d",
+          "changed": false,
+          "ssl_unverified": false
+        }
+      ]
+    },
+    {
+      "id": "passive",
+      "abbr": "PHI",
+      "status": "ok",
+      "partial": false,
+      "checked_at": "2026-10-19",
+      "method": "官方原文比对（人工核读）",
+      "sources": [
+        {
+          "url": "https://passiv.de/en/02_informations/02_passive-house-requirements/02_passive-house-requirements.htm",
+          "http": 200,
+          "bytes": 54162,
+          "error": null,
+          "fetched_at": "2026-10-19T17:49:55+0800",
+          "from_cache": true,
+          "hash": "001e6a129874ab54",
+          "baseline_hash": "001e6a129874ab54",
+          "changed": false,
+          "ssl_unverified": false
+        }
+      ]
+    },
+    {
+      "id": "nabers",
+      "abbr": "NABERS",
+      "status": "unreachable",
+      "partial": true,
+      "checked_at": "2026-10-19",
+      "method": "官方原文比对（人工核读）",
+      "sources": [
+        {
+          "url": "https://www.nabers.gov.au/sites/default/files/2023-06/nabers_energy_and_water_for_offices_v5.1.pdf",
+          "http": null,
+          "bytes": 0,
+          "error": "TimeoutError:The read operation timed out",
+          "fetched_at": null,
+          "from_cache": false,
+          "hash": null,
+          "baseline_hash": null,
+          "changed": false,
+          "ssl_unverified": false
+        }
+      ]
+    },
+    {
+      "id": "energystar",
+      "abbr": "ES",
+      "status": "ok",
+      "partial": false,
+      "checked_at": "2026-10-19",
+      "method": "官方原文比对（人工核读）",
+      "sources": [
+        {
+          "url": "https://www.energystar.gov/buildings/building-recognition/building-certification",
+          "http": 200,
+          "bytes": 44665,
+          "error": null,
+          "fetched_at": "2026-10-19T17:51:21+0800",
+          "from_cache": true,
+          "hash": "ca3db59e07d80bc5",
+          "baseline_hash": "ca3db59e07d80bc5",
+          "changed": false,
+          "ssl_unverified": false
+        }
+      ]
+    },
+    {
+      "id": "sites",
+      "abbr": "SITES",
+      "status": "ok",
+      "partial": false,
+      "checked_at": "2026-10-19",
+      "method": "官方原文比对（人工核读）",
+      "sources": [
+        {
+          "url": "https://sustainablesites.org/certification-guide",
+          "http": 200,
+          "bytes": 46574,
+          "error": null,
+          "fetched_at": "2026-10-19T17:51:21+0800",
+          "from_cache": true,
+          "hash": "8e7e8ae969503d50",
+          "baseline_hash": "8e7e8ae969503d50",
+          "changed": false,
+          "ssl_unverified": false
+        }
+      ]
+    }
+  ]
+}

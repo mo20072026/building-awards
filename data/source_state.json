@@ -1,0 +1,113 @@
+{
+  "urls": {
+    "https://www.usgbc.org/leed/v41": {
+      "hash": "20baca994c887c3f",
+      "ts": 1792404414.1840498,
+      "accepted_at": "2026-10-19",
+      "system": "leed"
+    },
+    "https://www.hkgbc.org.hk/eng/beam-plus/beam-plus-references/manuals-assessment/ManualsFiles/BEAMPlus-NBV2-2021-EN.pdf": {
+      "hash": "d601be33817d6227",
+      "ts": 1792404416.2610636,
+      "accepted_at": "2026-10-19",
+      "system": "beam"
+    },
+    "https://edgebuildings.com/certify/": {
+      "hash": "05beb674a6b7fe87",
+      "ts": 1792404416.2632709,
+      "accepted_at": "2026-10-19",
+      "system": "edge"
+    },
+    "https://www.gbca.au/green-star-buildings-v1-1": {
+      "hash": "d52c06799567a72f",
+      "ts": 1792404416.265753,
+      "accepted_at": "2026-10-19",
+      "system": "greenstar"
+    },
+    "https://living-future.org/lbc/": {
+      "hash": "aaf874eab98e714d",
+      "ts": 1792404416.2670145,
+      "accepted_at": "2026-10-19",
+      "system": "lbc"
+    },
+    "https://www.qualitel.org/": {
+      "hash": "1c86a42c0c78bb0a",
+      "ts": 1792404416.9144478,
+      "accepted_at": "2026-10-19",
+      "system": "hqe"
+    },
+    "https://www.fitwel.org/": {
+      "hash": "964cf4058ade714e",
+      "ts": 1792404461.2210526,
+      "accepted_at": "2026-10-19",
+      "system": "fitwel"
+    },
+    "https://well.support/727d504c-f24c-4b3c-bdd1-1bccf7725c41": {
+      "hash": "73a319c3405bfa16",
+      "ts": 1792404461.2233322,
+      "accepted_at": "2026-10-19",
+      "system": "well"
+    },
+    "https://www.wellcertified.com/health-safety": {
+      "hash": "f80a97bf30eb2920",
+      "ts": 1792404461.224088,
+      "accepted_at": "2026-10-19",
+      "system": "hsr"
+    },
+    "https://passiv.de/en/02_informations/02_passive-house-requirements/02_passive-house-requirements.htm": {
+      "hash": "001e6a129874ab54",
+      "ts": 1792404461.2272303,
+      "accepted_at": "2026-10-19",
+      "system": "passive"
+    },
+    "https://www.energystar.gov/buildings/building-recognition/building-certification": {
+      "hash": "ca3db59e07d80bc5",
+      "ts": 1792404575.8129146,
+      "accepted_at": "2026-10-19",
+      "system": "energystar"
+    },
+    "https://sustainablesites.org/certification-guide": {
+      "hash": "8e7e8ae969503d50",
+      "ts": 1792404575.8160841,
+      "accepted_at": "2026-10-19",
+      "system": "sites"
+    },
+    "http://www.chinaasc.org.cn/": {
+      "hash": "fdbafba07effeb5d",
+      "ts": 1792404461.225171,
+      "accepted_at": "2026-10-19",
+      "system": "cnhealth"
+    },
+    "https://www.usgbc.org/leed/v5": {
+      "hash": "03b560a435538a80",
+      "ts": 1792404414.1840825,
+      "accepted_at": "2026-10-19",
+      "system": "leed"
+    },
+    "https://www.breeam.com/": {
+      "hash": "d3ab5747d743e082",
+      "ts": 1792404416.2469683,
+      "accepted_at": "2026-10-19",
+      "system": "breeam"
+    },
+    "https://www.dgnb-system.de/en/": {
+      "hash": "a937e020e02c691d",
+      "ts": 1792404416.2493045,
+      "accepted_at": "2026-10-19",
+      "system": "dgnb"
+    },
+    "https://thegbi.org/": {
+      "hash": "439d1ef6f70bd869",
+      "ts": 1792404416.9124098,
+      "accepted_at": "2026-10-19",
+      "system": "greenglobes"
+    },
+    "https://www1.bca.gov.sg/buildsg/sustainability": {
+      "hash": "483b50ffdd03c1ce",
+      "ts": 1792404416.2511227,
+      "accepted_at": "2026-10-19",
+      "system": "greenmark"
+    }
+  },
+  "updated_at": "2026-10-19 18:09:35"
+}

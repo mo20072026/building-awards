@@ -110,3 +110,43 @@ table.tbl tr td:first-child{font-weight:600;white-space:nowrap}
   .sidebar a.active{border-color:var(--accent)}
   #searchBox{flex:1 1 100%}
 }
+
+/* ---------- 自动核对面板 ---------- */
+.ac{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin-bottom:22px;scroll-margin-top:100px;box-shadow:0 1px 3px rgba(20,40,60,.05)}
+.ac-head{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:6px}
+.ac-head h2{font-size:19px;flex:1}
+.ac-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.ac-when{font-size:12.3px;color:var(--muted)}
+.ac-loading{font-size:12.5px;color:var(--muted)}
+.ac-btn{border:1px solid #ccd6e0;background:#fff;color:var(--accent);font-size:12.5px;padding:6px 12px;border-radius:8px;cursor:pointer;font-family:inherit}
+.ac-btn:hover{background:#eef4fb;border-color:#9dc0e4}
+.ac-intro{font-size:12.8px;color:var(--muted);margin:4px 0 14px;line-height:1.75}
+.ac-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:14px}
+.ac-card{border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:#fafbfc;border-top:3px solid #b9c6d3}
+.ac-card.ok{border-top-color:var(--green);background:#f6fbf8}
+.ac-card.warn{border-top-color:var(--gold);background:#fffcf3}
+.ac-card.bad{border-top-color:#c0392b;background:#fdf6f5}
+.ac-card.na{border-top-color:#98a6b3}
+.ac-k{font-size:12.3px;color:var(--muted);font-weight:700}
+.ac-v{font-size:27px;font-weight:800;line-height:1.25;letter-spacing:.5px}
+.ac-v small{font-size:14px;color:var(--muted);font-weight:600}
+.ac-d{font-size:11.6px;color:var(--muted);line-height:1.55;margin-top:2px}
+.ac-banner{font-size:12.5px;border-radius:8px;padding:8px 12px;margin:0 0 12px;line-height:1.6}
+.ac-banner.ok{background:var(--green-bg);color:#0b6b48;border:1px solid #bfe5d5}
+.ac-banner.warn{background:#fdf3e3;color:#8a6d1f;border:1px solid #f0dcb4}
+.ac-banner.bad{background:#fdecea;color:#a52a1e;border:1px solid #f3c7c1}
+.ac-tbl td{vertical-align:middle;font-size:12.8px}
+.ac-tbl td:first-child{white-space:nowrap;font-weight:700}
+.ac-tbl a{color:var(--accent);text-decoration:none}
+.ac-tbl a:hover{text-decoration:underline}
+.ac-tbl details summary{cursor:pointer;color:var(--accent);font-size:12px;outline:none}
+.ac-ev{font-size:11.4px;color:var(--muted);padding:3px 0;border-bottom:1px dashed #e8edf2;display:flex;gap:8px;flex-wrap:wrap;align-items:baseline}
+.ac-ev:last-child{border-bottom:none}
+.ac-ev code{background:#eef2f7;border-radius:4px;padding:0 5px;font-size:10.8px}
+.ac-ev .err{color:#a52a1e}
+.ac-ev .chg{color:#8a6d1f}
+.ac-ev.muted{opacity:.8}
+.st.bad{background:#fdecea;color:#a52a1e;border:1px solid #f3c7c1}
+.st.chg{background:#fdf3e3;color:#8a6d1f;border:1px solid #f0dcb4}
+.st.na{background:#eef2f7;color:#5b6b7c;border:1px solid #dbe3ea}
+@media(max-width:760px){.ac{padding:14px}.ac-v{font-size:23px}.ac-tbl{display:block;overflow-x:auto;white-space:nowrap}}

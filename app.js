@@ -699,7 +699,7 @@ function levelPill(i,total){
 }
 
 function buildSidebar(){
-  let h='<div class="grp">快速对比</div><a href="#compare" data-anchor>一句话区分</a><a href="#sources" data-anchor>数据核对记录</a>';  CATS.forEach(c=>{
+  let h='<div class="grp">自动核对</div><a href="#autocheck" data-anchor>三层核对面板</a><a href="#compare" data-anchor>一句话区分</a><a href="#sources" data-anchor>数据核对记录</a>';  CATS.forEach(c=>{
     h+=`<div class="grp">${c.name}</div>`;
     SYSTEMS.filter(s=>s.cat===c.id).forEach(s=>{
       h+=`<a href="#cert-${s.id}" data-anchor>${s.abbr} · ${s.name.split('（')[0]}</a>`;
@@ -710,13 +710,12 @@ function buildSidebar(){
 
 function catOf(id){return CATS.find(c=>c.id===id);}
 
-/* 依据与核对状态条 */
+/* 依据与核对状态条（状态由三层自动核对结果实时决定） */
 function srcLine(s){
-  const st=s.src.status==='verified'
-    ? `<span class="st ok">✓ 已核对官方原文 ${s.src.checked}</span>`
-    : `<span class="st warn">△ 待复核原文</span>`;
+  const st=autoState(s.id);
   return `<div class="src-line">📚 依据：<b>${s.src.doc}</b> · ${s.src.ver} · ${s.src.org}
-    <a href="${s.src.url}" target="_blank" rel="noopener">官方原文 ↗</a> ${st}</div>`;
+    <a href="${s.src.url}" target="_blank" rel="noopener">官方原文 ↗</a>
+    <span class="st ${st.cls}" title="${esc(st.tip||'')}">${st.text}</span></div>`;
 }
 
 /* 数据核对记录表 */
@@ -736,7 +735,8 @@ function sourcesHTML(){
   return `<section class="compare" id="sources">
     <h2>📚 数据核对记录</h2>
     <p class="src-intro">共 <b>${SYSTEMS.length}</b> 个体系，已核对官方原文 <b>${okN}</b> 个，待复核 <b>${SYSTEMS.length-okN}</b> 个。
-      最近整体复核：<b>2026-10-19</b>（联网比对官方标准 / 手册原文）；下次自动复核：<b>每月 1 日</b>。</p>
+      最近人工复核：<b>${FACTS?esc(FACTS.baseline_updated):'2026-10-19'}</b>；
+      最近官方源巡检：<b>${AUDIT?esc((AUDIT.generated_at||'').slice(0,10)):'—'}</b>；自动巡检周期：<b>每月 1 日</b>（GitHub Actions）。</p>
     <table class="tbl">
       <tr><th>体系</th><th>依据文件</th><th>版本</th><th>最近核对</th><th>状态</th><th>来源</th></tr>
       ${rows}
@@ -760,8 +760,15 @@ function renderMain(filter=''){
     h+='</section>';
   });
   if(!h) h='<div class="empty">没有匹配的认证体系，换个关键词试试。</div>';
-  $('#main').innerHTML=cmpHTML()+h+(kw?'':sourcesHTML());
+  $('#main').innerHTML=autocheckHTML()+cmpHTML()+h+(kw?'':sourcesHTML());
   bindEvents();
+  refreshObserve();
+}
+
+/* 重绘后重新挂滚动观察（.ac 为自动核对面板） */
+function refreshObserve(){
+  if(!window.io) return;
+  document.querySelectorAll('.cert,.compare,.ac').forEach(el=>window.io.observe(el));
 }
 
 function cmpHTML(){
@@ -989,15 +996,227 @@ function bindEvents(){
   });
 }
 
-/* ---------- 搜索 & 滚动高亮 ---------- */
+/* ============================================================
+   三层自动核对
+   L1 页面自检   —— 本页数据结构内部一致性（浏览器即时跑，不依赖网络）
+   L2 基准比对   —— app.js 数值 vs data/facts.json（人工核对后固化的基准）
+   L3 官方源巡检 —— data/audit.json（GitHub Actions 每月抓官方原文比对指纹）
+============================================================ */
+let AUDIT=null, FACTS=null, CHECK=null, AC_ERR='', AC_BUSY=false;
+
+function fetchJSON(url){
+  return fetch(url+'?t='+Date.now(),{cache:'no-store'}).then(r=>{
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    return r.json();
+  });
+}
+
+function loadRemote(){
+  if(typeof fetch!=='function'){ return Promise.resolve(); }
+  AC_BUSY=true;
+  const jobs=[];
+  jobs.push(fetchJSON('data/facts.json').then(d=>{FACTS=d;})
+    .catch(e=>{AC_ERR='核对基准读取失败：'+e.message;}));
+  jobs.push(fetchJSON('data/audit.json').then(d=>{AUDIT=d;})
+    .catch(e=>{AC_ERR='巡检结果读取失败：'+e.message;}));
+  return Promise.all(jobs).then(()=>{ CHECK=runChecks(); AC_BUSY=false; });
+}
+
+function sameNums(a,b){
+  if(!Array.isArray(a)||!Array.isArray(b)||a.length!==b.length) return false;
+  return a.every((x,i)=>Math.abs(+x-(+b[i]))<0.01);
+}
+
+function runChecks(){
+  const l1=[], l2=[], l3=[], seen=new Set();
+  SYSTEMS.forEach(s=>{
+    const p=(label,ok,detail)=>l1.push({id:s.id,label,ok:!!ok,detail:detail||''});
+    p('体系 id 唯一', !seen.has(s.id), s.id); seen.add(s.id);
+    p('类别有效', !!catOf(s.cat), s.cat);
+    p('依据字段完整（文件/版本/机构/链接）',
+      !!(s.src&&s.src.doc&&s.src.ver&&s.src.org&&/^https?:/.test(s.src.url||'')));
+    p('参评流程非空', Array.isArray(s.apply)&&s.apply.length>0);
+    p('等级表非空', Array.isArray(s.levels)&&s.levels.length>0);
+    p('评价指标非空', Array.isArray(s.indicators)&&s.indicators.length>0);
+    p('评分标准非空', Array.isArray(s.scoring)&&s.scoring.length>0);
+    p('计算器已配置', !!(s.calc&&s.calc.type));
+
+    const th=((s.calc&&s.calc.thresholds)||[]).map(t=>t.min);
+    const max=s.calc&&s.calc.total;
+    if(th.length){
+      p('分数线严格递增', th.every((v,i)=>i===0||v>th[i-1]), th.join(' / '));
+      p('分数线不超过满分', !max||th[th.length-1]<=max, 'max='+max);
+    }
+    if(s.calc.type==='items'){
+      const w=s.indicators.map(i=>i[1]);
+      if(w.every(x=>typeof x==='number')){
+        const sum=+w.reduce((a,b)=>a+b,0).toFixed(2);
+        const target=s.calc.percent?100:max;
+        if(target) p('权重合计＝'+(s.calc.percent?'100%':'满分'), Math.abs(sum-target)<0.6, `${sum} vs ${target}`);
+      }
+    }
+    if(th.length && s.levels.length===th.length){
+      const lows=s.levels.map(l=>{
+        const m=String(l.range||'').match(/\d+(?:\.\d+)?/g); return m?+m[0]:null;
+      });
+      if(lows.every(x=>x!==null)) p('等级表与分数线一致', sameNums(lows,th), `${lows.join('/')} vs ${th.join('/')}`);
+    }
+
+    /* L2 */
+    const f=FACTS&&(FACTS.systems||[]).find(x=>x.id===s.id);
+    if(f){
+      const diffs=[];
+      if(f.values.max!=null&&max!=null&&f.values.max!==max) diffs.push(`满分 ${f.values.max} → ${max}`);
+      if(f.values.thresholds&&!sameNums(f.values.thresholds,th)) diffs.push(`分数线 ${f.values.thresholds.join('/')} → ${th.join('/')}`);
+      if(f.values.weights){
+        const w=s.indicators.map(i=>i[1]);
+        if(!sameNums(f.values.weights,w)) diffs.push('指标权重与基准不符');
+      }
+      l2.push({id:s.id,abbr:s.abbr,ok:!diffs.length,diffs});
+    } else {
+      l2.push({id:s.id,abbr:s.abbr,ok:false,diffs:[FACTS?'基准未收录该体系':'基准未加载']});
+    }
+
+    /* L3 */
+    const a=AUDIT&&(AUDIT.systems||[]).find(x=>x.id===s.id);
+    l3.push({id:s.id,abbr:s.abbr,status:a?a.status:(AUDIT?'missing':'pending'),audit:a||null});
+  });
+  return {l1,l2,l3,at:new Date()};
+}
+
+function l1Of(id){
+  const items=(CHECK?CHECK.l1:[]).filter(x=>x.id===id);
+  const bad=items.filter(x=>!x.ok);
+  return {total:items.length, pass:items.length-bad.length, bad};
+}
+
+function autoState(id){
+  const l2=CHECK&&CHECK.l2.find(x=>x.id===id);
+  const l3=CHECK&&CHECK.l3.find(x=>x.id===id);
+  if(l2&&!l2.ok) return {cls:'bad',text:'✕ 与核对基准不一致',tip:l2.diffs.join('；')};
+  if(!l3||l3.status==='pending') return {cls:'warn',text:'△ 等待自动核对',tip:'正在读取核对基准与巡检结果'};
+  if(l3.status==='missing') return {cls:'warn',text:'△ 巡检未覆盖',tip:'巡检结果中没有该体系'};
+  const srcs=((l3.audit||{}).sources||[]);
+  if(l3.status==='ok') return {cls:'ok',text:'✓ 自动核对通过',tip:'官方源正文指纹未变\n'+srcs.map(x=>x.url).join('\n')};
+  if(l3.status==='changed') return {cls:'chg',text:'△ 官方页面有更新，待确认',tip:'官方源正文指纹变化，可能是新版发布，需人工确认后更新基准'};
+  if(l3.status==='seeded') return {cls:'warn',text:'△ 指纹基线已建立',tip:'首次巡检，下一轮起可自动识别变化'};
+  if(l3.status==='unreachable') return {cls:'na',text:'· 官方源抓取受限',tip:'该来源拒绝抓取/需登录/动态渲染，转人工核对'};
+  return {cls:'na',text:'· 待人工核对',tip:''};
+}
+
+function pct(n,d){ return d?Math.round(n/d*100):0; }
+
+function autocheckHTML(){
+  if(!CHECK){
+    return `<section class="ac" id="autocheck">
+      <div class="ac-head"><h2>🛡 自动核对</h2><span class="ac-loading">${AC_ERR||'正在读取核对基准与巡检结果…'}</span></div>
+    </section>`;
+  }
+  const l1p=CHECK.l1.filter(x=>x.ok).length, l1t=CHECK.l1.length;
+  const l2p=CHECK.l2.filter(x=>x.ok).length, l2t=CHECK.l2.length;
+  const oks=CHECK.l3.filter(x=>['ok','seeded'].includes(x.status)).length;
+  const chg=CHECK.l3.filter(x=>x.status==='changed').length;
+  const unr=CHECK.l3.filter(x=>x.status==='unreachable').length;
+  const l3t=CHECK.l3.length;
+  const age=AUDIT?AUDIT.baseline_age_days:null, maxAge=AUDIT?AUDIT.max_age_days:45;
+  const expired=!!(AUDIT&&AUDIT.baseline_expired);
+
+  const rows=SYSTEMS.map(s=>{
+    const one=l1Of(s.id);
+    const l2=CHECK.l2.find(x=>x.id===s.id);
+    const l3=CHECK.l3.find(x=>x.id===s.id);
+    const a=l3&&l3.audit;
+    const st=autoState(s.id);
+    const cells=[
+      one.bad.length?`<span class="st bad" title="${esc(one.bad.map(b=>b.label+'：'+b.detail).join('\n'))}">${one.pass}/${one.total}</span>`
+                    :`<span class="st ok">${one.pass}/${one.total}</span>`,
+      l2&&l2.ok?`<span class="st ok">一致</span>`
+               :`<span class="st bad" title="${esc((l2?l2.diffs:['未比对']).join('；'))}">不一致</span>`,
+      `<span class="st ${st.cls}" title="${esc(st.tip)}">${st.text.replace(/^[✓△✕·]\s*/,'')}</span>`,
+    ];
+    const ev=(a&&a.sources&&a.sources.length)
+      ? a.sources.map(x=>`<div class="ac-ev"><a href="${x.url}" target="_blank" rel="noopener">${x.url.replace(/^https?:\/\//,'').slice(0,52)}</a>
+          ${x.http?`<span>HTTP ${x.http}</span>`:''}
+          ${x.changed?'<b class="chg">指纹已变</b>':''}
+          ${x.error?`<span class="err">${esc(x.error)}</span>`:''}
+          ${x.hash?`<code>${x.hash}</code>`:''}</div>`).join('')
+      : '<div class="ac-ev muted">无可机读官方源，依据人工核对</div>';
+    return `<tr>
+      <td><a href="#cert-${s.id}">${s.abbr}</a></td>
+      <td>${cells[0]}</td>
+      <td>${cells[1]}</td>
+      <td>${cells[2]}</td>
+      <td><details><summary>查看</summary>${ev}</details></td>
+    </tr>`;
+  }).join('');
+
+  const banner = expired
+    ? `<div class="ac-banner warn">⚠ 核对基准已 ${age} 天未复检（上限 ${maxAge} 天），建议本轮重新核对官方原文后更新 <code>data/facts.json</code>。</div>`
+    : `<div class="ac-banner ok">✓ 核对基准 ${age==null?'—':age} 天前更新，在 ${maxAge} 天有效期内。</div>`;
+  const errLine = AC_ERR?`<div class="ac-banner bad">${esc(AC_ERR)}（本地预览时请用 http 服务打开，file:// 无法读取 data/）</div>`:'';
+
+  return `<section class="ac" id="autocheck">
+    <div class="ac-head">
+      <h2>🛡 自动核对</h2>
+      <div class="ac-actions">
+        <span class="ac-when">官方源巡检：<b>${AUDIT?esc(AUDIT.generated_at):'—'}</b> · 基准：<b>${FACTS?esc(FACTS.baseline_updated):'—'}</b></span>
+        <button class="ac-btn" id="acRefresh">↻ 重新读取核对结果</button>
+      </div>
+    </div>
+    <p class="ac-intro">每次打开本页都会自动跑三层核对：<b>① 页面自检</b>（数据结构内部一致性，浏览器本地计算）→ <b>② 基准比对</b>（页面数值与人工核对后固化的官方基准逐项对照）→ <b>③ 官方源巡检</b>（每月抓取认证机构官网原文比对正文指纹，由 GitHub Actions 执行）。</p>
+    <div class="ac-cards">
+      <div class="ac-card ${l1p===l1t?'ok':'bad'}">
+        <div class="ac-k">① 页面自检</div>
+        <div class="ac-v">${l1p}<small>/${l1t}</small></div>
+        <div class="ac-d">权重合计 · 分数线递增 · 等级表↔计算器 · 依据字段</div>
+      </div>
+      <div class="ac-card ${l2p===l2t?'ok':'bad'}">
+        <div class="ac-k">② 基准比对</div>
+        <div class="ac-v">${l2p}<small>/${l2t}</small></div>
+        <div class="ac-d">页面数值与官方基准一致的体系数</div>
+      </div>
+      <div class="ac-card ${chg?'warn':(unr?'na':'ok')}">
+        <div class="ac-k">③ 官方源巡检</div>
+        <div class="ac-v">${oks}<small>/${l3t}</small></div>
+        <div class="ac-d">指纹未变 ${oks} · 有更新 ${chg} · 抓取受限 ${unr}</div>
+      </div>
+      <div class="ac-card ${expired?'warn':'ok'}">
+        <div class="ac-k">基准时效</div>
+        <div class="ac-v">${age==null?'—':age}<small> 天</small></div>
+        <div class="ac-d">上限 ${maxAge} 天，超期自动提醒复检</div>
+      </div>
+    </div>
+    ${errLine}${banner}
+    <table class="tbl ac-tbl">
+      <tr><th>体系</th><th>① 自检</th><th>② 基准</th><th>③ 官方源</th><th>证据</th></tr>
+      ${rows}
+    </table>
+    <div class="note">判定口径：②不一致＝页面数值被改动但未同步核对基准（红色，必须处理）；③「官方页面有更新」＝正文指纹变化（可能是新版发布，也可能是页面改版），需人工读原文确认后再 <code>--accept-changes</code>；抓取受限的体系（政府站反爬/纯 JS 渲染/需登录）转人工核对，不臆断为通过。</div>
+  </section>`;
+}
+
+
 $('#searchBox').addEventListener('input',e=>renderMain(e.target.value));
 
+window.__SYSTEMS=SYSTEMS;   // 供自动核对 / 测试读取
+window.__getCheck=()=>CHECK;
 window.__openSet=new Set(['leed','cn3star']); // 默认展开 LEED 与绿建三星
 buildSidebar();
 renderMain();
 
+/* 读取核对基准与巡检结果后重绘（失败也重绘，展示错误原因） */
+loadRemote().then(()=>{ renderMain($('#searchBox').value); });
+
+/* 手动重读（Actions 更新 audit.json 后无需刷新页面缓存） */
+document.addEventListener('click',e=>{
+  const btn=e.target.closest&&e.target.closest('#acRefresh');
+  if(!btn||AC_BUSY) return;
+  AC_ERR=''; AC_BUSY=true; btn.textContent='读取中…';
+  loadRemote().then(()=>renderMain($('#searchBox').value));
+});
+
 /* 侧栏滚动高亮 */
-const io=new IntersectionObserver(es=>{
+var io=new IntersectionObserver(es=>{
   es.forEach(en=>{
     if(en.isIntersecting){
       document.querySelectorAll('.sidebar a').forEach(a=>a.classList.remove('active'));
@@ -1006,4 +1225,4 @@ const io=new IntersectionObserver(es=>{
     }
   });
 },{rootMargin:'-90px 0px -60% 0px'});
-document.querySelectorAll('.cert,.compare').forEach(el=>io.observe(el));
+refreshObserve();

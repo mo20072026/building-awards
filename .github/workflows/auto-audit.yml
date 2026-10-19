@@ -1,0 +1,97 @@
+name: 官方源自动巡检
+
+# 每月 1 日 09:00（北京时间）抓取认证机构官网原文，比对正文指纹；
+# 页面数值与核对基准的一致性由 test_audit.js 在同一任务里把关。
+on:
+  schedule:
+    - cron: '0 1 1 * *'      # UTC 01:00 = 北京 09:00
+  workflow_dispatch:          # 支持手动触发
+  push:
+    paths:
+      - 'data/facts.json'
+      - 'scripts/auto_check.py'
+      - '.github/workflows/auto-audit.yml'
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: auto-audit
+  cancel-in-progress: false
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 安装依赖
+        run: |
+          python -m pip install --quiet pypdf
+          npm install --no-save --silent jsdom
+
+      - name: L3 · 抓取官方源并比对正文指纹
+        run: python scripts/auto_check.py --soft
+
+      - name: L1+L2 · 页面自检与核对基准比对
+        run: node scripts/test_audit.js
+
+      - name: 汇总巡检结论
+        id: gate
+        run: |
+          python - <<'PY'
+          import json, os
+          a = json.load(open('data/audit.json', encoding='utf-8'))
+          s = a['summary']
+          changed = [x['abbr'] for x in a['systems'] if x['status'] == 'changed']
+          unreach = [x['abbr'] for x in a['systems'] if x['status'] == 'unreachable']
+          out = os.environ['GITHUB_OUTPUT']
+          with open(out, 'a', encoding='utf-8') as f:
+              f.write('changed=%d\n' % s['changed'])
+              f.write('changed_list=%s\n' % (','.join(changed) or '无'))
+              f.write('unreachable_list=%s\n' % (','.join(unreach) or '无'))
+              f.write('expired=%s\n' % ('1' if a.get('baseline_expired') else '0'))
+          print(json.dumps(s, ensure_ascii=False))
+          PY
+
+      - name: 回写巡检结果（audit.json / 指纹基线）
+        run: |
+          git config user.name "auto-audit-bot"
+          git config user.email "auto-audit-bot@users.noreply.github.com"
+          git add data/audit.json data/source_state.json
+          if git diff --cached --quiet; then
+            echo "巡检结果无变化"
+          else
+            git commit -m "chore(audit): 官方源自动巡检 $(date -u +%F)"
+            git push
+          fi
+
+      - name: 官方页面有更新时开 issue 待人工确认
+        if: steps.gate.outputs.changed != '0'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          LIST: ${{ steps.gate.outputs.changed_list }}
+        run: |
+          gh issue create \
+            --title "官方源有更新待确认：$LIST" \
+            --body "自动巡检发现以下体系的官方页面正文指纹变化，可能发布了新版标准，也可能是页面改版：
+
+          $LIST
+
+          处理方式：
+          1. 打开 \`data/audit.json\` 查看对应体系的 hash 变化与来源链接；
+          2. 逐项核对官方原文的等级分数线、指标权重、满分与硬性门槛；
+          3. 若确有变更，改 \`app.js\` 与 \`data/facts.json\`（两者必须同步），跑 \`node scripts/test_audit.js\`；
+          4. 确认无误后执行 \`python scripts/auto_check.py --accept-changes\` 更新指纹基线，提交并关闭本 issue。
+
+          基线过期提醒：${{ steps.gate.outputs.expired }}（1 表示已超过 45 天未复检）"

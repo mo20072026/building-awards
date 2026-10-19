@@ -1,0 +1,368 @@
+{
+  "version": 1,
+  "baseline_updated": "2026-10-19",
+  "max_age_days": 45,
+  "note": "核对基准（baseline）：由联网比对官方原文后固化。网页加载时会把 app.js 的数值与本文件逐项比对，不一致立即报警；本文件超过 max_age_days 未复检则标记过期。",
+  "systems": [
+    {
+      "id": "leed",
+      "abbr": "LEED",
+      "checked_at": "2026-10-19",
+      "method": "官方原文比对（人工核读）",
+      "sources": [
+        "https://www.usgbc.org/leed/v41",
+        "https://www.usgbc.org/leed/v5"
+      ],
+      "values": {
+        "max": 110,
+        "thresholds": [
+          40,
+          50,
+          60,
+          80
+        ],
+        "weights": [
+          16,
+          10,
+          11,
+          33,
+          13,
+          16,
+          1,
+          6,
+          4
+        ]
+      }
+    },
+    {
+      "id": "breeam",
+      "abbr": "BREEAM",
+      "checked_at": "2026-10-19",
+      "method": "官方原文比对（人工核读）",
+      "sources": [
+        "https://files.bregroup.com/breeam/technicalmanuals/NC2018/content/",
+        "https://www.breeam.com/"
+      ],
+      "values": {
+        "max": null,
+        "thresholds": [
+          30,
+          45,
+          55,
+          70,
+          85
+        ],
+        "weights": [
+          11,
+          14,
+          16,
+          10,
+          7,
+          15,
+          6,
+          13,
+          8
+        ]
+      }
+    },
+    {
+      "id": "dgnb",
+      "abbr": "DGNB",
+      "checked_at": "2026-10-19",
+      "method": "官方原文比对（人工核读）",
+      "sources": [
+        "https://www.dgnb-system.de/en/"
+      ],
+      "values": {
+        "max": null,
+        "thresholds": [
+          35,
+          50,
+          65,
+          80
+        ],
+        "weights": [
+          22.5,
+          22.5,
+          22.5,
+          12.5,
+          12.5,
+          7.5
+        ]
+      }
+    },
+    {
+      "id": "greenmark",
+      "abbr": "GM",
+      "checked_at": "2026-10-19",
+      "method": "官方原文比对（人工核读）",
+      "sources": [
+        "https://www1.bca.gov.sg/docs/default-source/docs-corp-buildsg/sustainability/20240101_certification_standard_r2.pdf",
+        "https://www1.bca.gov.sg/buildsg/sustainability"
+      ],
+      "values": {
+        "max": 100,
+        "thresholds": [
+          10,
+          25,
+          45,
+          60
+        ]
+      }
+    },
+    {
+      "id": "beam",
+      "abbr": "BEAM",
+      "checked_at": "2026-10-19",
+      "method": "官方原文比对（人工核读）",
+      "sources": [
+        "https://www.hkgbc.org.hk/eng/beam-plus/beam-plus-references/manuals-assessment/ManualsFiles/BEAMPlus-NBV2-2021-EN.pdf"
+      ],
+      "values": {
+        "max": null,
+        "thresholds": [
+          40,
+          55,
+          65,
+          75
+        ],
+        "weights": [
+          18,
+          15,
+          9,
+          29,
+          7,
+          22
+        ]
+      }
+    },
+    {
+      "id": "edge",
+      "abbr": "EDGE",
+      "checked_at": "2026-10-19",
+      "method": "官方原文比对（人工核读）",
+      "sources": [
+        "https://edgebuildings.com/certify/"
+      ],
+      "values": {
+        "max": null,
+        "thresholds": []
+      }
+    },
+    {
+      "id": "greenstar",
+      "abbr": "GS",
+      "checked_at": "2026-10-19",
+      "method": "官方原文比对（人工核读）",
+      "sources": [
+        "https://www.gbca.au/green-star-buildings-v1-1"
+      ],
+      "values": {
+        "max": 100,
+        "thresholds": [
+          15,
+          35,
+          70
+        ]
+      }
+    },
+    {
+      "id": "lbc",
+      "abbr": "LBC",
+      "checked_at": "2026-10-19",
+      "method": "官方原文比对（人工核读）",
+      "sources": [
+        "https://living-future.org/lbc/"
+      ],
+      "values": {
+        "max": null,
+        "thresholds": []
+      }
+    },
+    {
+      "id": "greenglobes",
+      "abbr": "GG",
+      "checked_at": "2026-10-19",
+      "method": "官方原文比对（人工核读）",
+      "sources": [
+        "https://thegbi.org/green-globes-certification/",
+        "https://thegbi.org/"
+      ],
+      "values": {
+        "max": null,
+        "thresholds": [
+          35,
+          55,
+          70,
+          85
+        ],
+        "weights": [
+          10,
+          10,
+          35,
+          10,
+          12,
+          15,
+          8
+        ]
+      }
+    },
+    {
+      "id": "hqe",
+      "abbr": "HQE",
+      "checked_at": "2026-10-19",
+      "method": "官方原文比对（人工核读）",
+      "sources": [
+        "https://www.qualitel.org/"
+      ],
+      "values": {
+        "max": null,
+        "thresholds": [
+          50,
+          60,
+          70,
+          80
+        ],
+        "weights": [
+          25,
+          25,
+          25,
+          25
+        ]
+      }
+    },
+    {
+      "id": "cn3star",
+      "abbr": "绿建三星",
+      "checked_at": "2026-10-19",
+      "method": "官方原文比对（人工核读）",
+      "sources": [
+        "https://www.mohurd.gov.cn/"
+      ],
+      "values": {
+        "max": null,
+        "thresholds": []
+      }
+    },
+    {
+      "id": "fitwel",
+      "abbr": "Fitwel",
+      "checked_at": "2026-10-19",
+      "method": "官方原文比对（人工核读）",
+      "sources": [
+        "https://www.fitwel.org/"
+      ],
+      "values": {
+        "max": 144,
+        "thresholds": [
+          90,
+          105,
+          125
+        ]
+      }
+    },
+    {
+      "id": "well",
+      "abbr": "WELL",
+      "checked_at": "2026-10-19",
+      "method": "官方原文比对（人工核读）",
+      "sources": [
+        "https://well.support/727d504c-f24c-4b3c-bdd1-1bccf7725c41"
+      ],
+      "values": {
+        "max": 110,
+        "thresholds": [
+          40,
+          50,
+          60,
+          80
+        ]
+      }
+    },
+    {
+      "id": "hsr",
+      "abbr": "WELL HSR",
+      "checked_at": "2026-10-19",
+      "method": "官方原文比对（人工核读）",
+      "sources": [
+        "https://www.wellcertified.com/health-safety"
+      ],
+      "values": {
+        "max": null,
+        "thresholds": []
+      }
+    },
+    {
+      "id": "cnhealth",
+      "abbr": "健康标识",
+      "checked_at": "2026-10-19",
+      "method": "官方原文比对（人工核读）",
+      "sources": [
+        "http://www.chinaasc.org.cn/"
+      ],
+      "values": {
+        "max": null,
+        "thresholds": []
+      }
+    },
+    {
+      "id": "passive",
+      "abbr": "PHI",
+      "checked_at": "2026-10-19",
+      "method": "官方原文比对（人工核读）",
+      "sources": [
+        "https://passiv.de/en/02_informations/02_passive-house-requirements/02_passive-house-requirements.htm"
+      ],
+      "values": {
+        "max": null,
+        "thresholds": []
+      }
+    },
+    {
+      "id": "nabers",
+      "abbr": "NABERS",
+      "checked_at": "2026-10-19",
+      "method": "官方原文比对（人工核读）",
+      "sources": [
+        "https://www.nabers.gov.au/sites/default/files/2023-06/nabers_energy_and_water_for_offices_v5.1.pdf"
+      ],
+      "values": {
+        "max": null,
+        "thresholds": []
+      }
+    },
+    {
+      "id": "energystar",
+      "abbr": "ES",
+      "checked_at": "2026-10-19",
+      "method": "官方原文比对（人工核读）",
+      "sources": [
+        "https://www.energystar.gov/buildings/building-recognition/building-certification"
+      ],
+      "values": {
+        "max": 100,
+        "thresholds": [
+          75
+        ]
+      }
+    },
+    {
+      "id": "sites",
+      "abbr": "SITES",
+      "checked_at": "2026-10-19",
+      "method": "官方原文比对（人工核读）",
+      "sources": [
+        "https://sustainablesites.org/certification-guide"
+      ],
+      "values": {
+        "max": 200,
+        "thresholds": [
+          70,
+          85,
+          100,
+          135
+        ]
+      }
+    }
+  ]
+}
