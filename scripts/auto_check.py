@@ -11,7 +11,8 @@
 判定口径（不臆断）：
   ok           官方源可访问，正文指纹与上次基线一致
   changed      官方源正文指纹变化（可能出新版/改版）→ 需要人工确认后更新基准
-  unreachable  抓取失败（403/404/超时/JS 渲染）→ 转人工
+  archived     线上抓取失败，但本地存档的官方原文 sha256 一致（离线可比对）
+  unreachable  抓取失败且无存档（403/404/超时/JS 渲染）→ 转人工
   no_source    该体系无可机读官方源（PDF/动态页），只做人工核对
   seeded       首次抓取，已建立指纹基线
 
@@ -246,6 +247,26 @@ def main():
             status = 'seeded'
         partial = bool(recs) and len(ok_recs) < len(recs)
 
+        # 线上抓不到时的兜底：比对本地存档的官方原文（sha256）
+        arch = s.get('archive') or None
+        if status == 'unreachable' and arch:
+            ap = arch.get('file') or ''
+            full = ap if os.path.isabs(ap) else os.path.join(ROOT, ap.replace('/', os.sep))
+            info = {'file': ap, 'url': arch.get('url'), 'expect': arch.get('sha256'),
+                    'bytes': None, 'sha256': None, 'ok': False, 'note': arch.get('note')}
+            try:
+                with open(full, 'rb') as f:
+                    blob = f.read()
+                info['bytes'] = len(blob)
+                info['sha256'] = hashlib.sha256(blob).hexdigest()
+                info['ok'] = bool(info['expect']) and info['sha256'] == info['expect']
+            except Exception as e:  # noqa: BLE001
+                info['error'] = '%s:%s' % (type(e).__name__, str(e)[:40])
+            if info['ok']:
+                status = 'archived'
+            for r in recs:
+                r['archive'] = info
+
         if args.accept_changes:
             for url, h in hashes:
                 state['urls'][url] = {'hash': h, 'ts': time.time(),
@@ -258,6 +279,8 @@ def main():
             'partial': partial,
             'checked_at': s.get('checked_at'),
             'method': s.get('method'),
+            'manual': s.get('manual_review'),
+            'archive': s.get('archive'),
             'sources': recs,
         })
 
@@ -275,7 +298,7 @@ def main():
         age = 0
     max_age = facts.get('max_age_days', 45)
 
-    keys = ('ok', 'changed', 'unreachable', 'no_source', 'seeded')
+    keys = ('ok', 'archived', 'changed', 'unreachable', 'no_source', 'seeded')
     summary = {k: sum(1 for r in rows if r['status'] == k) for k in keys}
     summary['total'] = len(rows)
 
@@ -298,7 +321,7 @@ def main():
     print('audit ->', os.path.relpath(args.out, ROOT))
     print('baseline age %d 天（上限 %d）%s' % (age, max_age, '  ⚠ 已过期' if age > max_age else ''))
     print('summary: ' + '  '.join('%s=%d' % (k, summary[k]) for k in keys))
-    icon = {'ok': '✓', 'changed': '△', 'unreachable': '!', 'no_source': '·', 'seeded': '+'}
+    icon = {'ok': '✓', 'archived': '▣', 'changed': '△', 'unreachable': '!', 'no_source': '·', 'seeded': '+'}
     for r in rows:
         extra = ''
         if r['status'] == 'unreachable':

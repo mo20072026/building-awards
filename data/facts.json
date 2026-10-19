@@ -242,6 +242,17 @@
       "values": {
         "max": null,
         "thresholds": []
+      },
+      "archive": {
+        "file": "data/refs/gbt50378-2019.pdf",
+        "url": "https://www.cnfin.com/upload-xh08/2019/0801/1564623142657.pdf",
+        "sha256": "e71b3c162af35f7bf9ce3bfa2e4e52ce1894c03418844da4a16c44302382e9e8",
+        "note": "GB/T 50378-2019 全文 PDF（住建部发布国家标准）"
+      },
+      "manual_review": {
+        "at": "2026-10-19",
+        "url": "https://www.cnfin.com/upload-xh08/2019/0801/1564623142657.pdf",
+        "quote": "表3.2.4 评分项满分 100/100/70/200/100（预评价）、100/100/100/200/100（评价）；3.2.5 Q=(Q0+Q1…Q5+QA)/10；3.2.8 总得分 60/70/85 分且每类≥满分 30%"
       }
     },
     {
@@ -267,7 +278,8 @@
       "checked_at": "2026-10-19",
       "method": "官方原文比对（人工核读）",
       "sources": [
-        "https://well.support/727d504c-f24c-4b3c-bdd1-1bccf7725c41"
+        "https://well.support/727d504c-f24c-4b3c-bdd1-1bccf7725c41",
+        "https://support.wellcertified.com/hc/en-us/articles/25652750343959-Create-a-custom-scorecard"
       ],
       "values": {
         "max": 110,
@@ -277,6 +289,11 @@
           60,
           80
         ]
+      },
+      "manual_review": {
+        "at": "2026-10-19",
+        "url": "https://support.wellcertified.com/hc/en-us/articles/25652750343959-Create-a-custom-scorecard",
+        "quote": "Bronze 40 pts（每概念 0 分下限）/ Silver 50（1）/ Gold 60（2）/ Platinum 80（3）；100 分 + 10 创新分；每概念上限 12 分"
       }
     },
     {
@@ -329,6 +346,11 @@
       "values": {
         "max": null,
         "thresholds": []
+      },
+      "manual_review": {
+        "at": "2026-10-19",
+        "url": "https://www.nabers.gov.au/sites/default/files/2023-06/nabers_energy_and_water_for_offices_v5.1.pdf",
+        "quote": "6 stars 市场领先 / 5 stars 优秀 / 3 stars 市场平均（0–6 星制，实测 12 个月数据）"
       }
     },
     {

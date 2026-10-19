@@ -65,6 +65,27 @@ function ok(cond, label) {
   ok(!!doc.querySelector('#acRefresh'), '「重新读取核对结果」按钮存在');
   ok(doc.querySelector('.src-line .st') !== null, '卡片依据行显示动态核对状态');
 
+  console.log('【折叠与受限标注】');
+  const acFold = doc.querySelector('#autocheck details.fold');
+  const srcFold = doc.querySelector('#sources details.fold');
+  ok(!!acFold && !acFold.open, '自动核对面板默认折叠');
+  ok(!!srcFold && !srcFold.open, '数据核对记录默认折叠');
+  ok(/① 自检/.test(acFold.querySelector('.fold-s').textContent), '折叠标题保留三层核对摘要');
+  acFold.querySelector('summary').dispatchEvent(new w.MouseEvent('click', { bubbles: true }));
+  ok(acFold.open === true, '手动点击后展开');
+  const LIMITED = ['unreachable', 'archived'];
+  const limited = c.l3.filter((x) => LIMITED.includes(x.status));
+  const naBox = doc.querySelector('.na-box');
+  if (limited.length) {
+    ok(!!naBox, `抓取受限清单已渲染（${limited.length} 项）`);
+    ok(doc.querySelectorAll('.na-item').length === limited.length, '清单逐条列出受限体系');
+    ok(/存档|人工/.test(naBox.textContent), '清单标注了替代核对方式');
+  } else {
+    ok(!naBox, '无受限体系时不渲染清单');
+  }
+  const arcOne = c.l3.find((x) => x.status === 'archived');
+  if (arcOne) ok(!!doc.querySelector('.st.arch'), '存档比对状态徽标已渲染');
+
   console.log('【变异测试：基准比对应能抓到改动】');
   const S = w.__SYSTEMS;
   const t = S.find((s) => s.id === 'leed');

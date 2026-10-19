@@ -733,16 +733,24 @@ function sourcesHTML(){
     </tr>`;
   }).join('');
   return `<section class="compare" id="sources">
-    <h2>📚 数据核对记录</h2>
-    <p class="src-intro">共 <b>${SYSTEMS.length}</b> 个体系，已核对官方原文 <b>${okN}</b> 个，待复核 <b>${SYSTEMS.length-okN}</b> 个。
-      最近人工复核：<b>${FACTS?esc(FACTS.baseline_updated):'2026-10-19'}</b>；
-      最近官方源巡检：<b>${AUDIT?esc((AUDIT.generated_at||'').slice(0,10)):'—'}</b>；自动巡检周期：<b>每月 1 日</b>（GitHub Actions）。</p>
-    <table class="tbl">
-      <tr><th>体系</th><th>依据文件</th><th>版本</th><th>最近核对</th><th>状态</th><th>来源</th></tr>
-      ${rows}
-    </table>
-    <div class="note">复核口径：以认证机构官网发布的现行手册 / 标准原文为准，逐项比对"等级分数线、指标权重、满分与硬性门槛"。
-      若官方发布新版本，先在本表登记版本变更，再更新卡片数据与计算器。</div>
+    <details class="fold">
+      <summary class="fold-sum">
+        <span class="fold-t">📚 数据核对记录</span>
+        <span class="fold-s">${SYSTEMS.length} 个体系 · 已核对官方原文 ${okN} · 待复核 ${SYSTEMS.length-okN} · 最近复核 ${FACTS?esc(FACTS.baseline_updated):'2026-10-19'}</span>
+        <span class="fold-x">展开</span>
+      </summary>
+      <div class="fold-body">
+        <p class="src-intro">共 <b>${SYSTEMS.length}</b> 个体系，已核对官方原文 <b>${okN}</b> 个，待复核 <b>${SYSTEMS.length-okN}</b> 个。
+          最近人工复核：<b>${FACTS?esc(FACTS.baseline_updated):'2026-10-19'}</b>；
+          最近官方源巡检：<b>${AUDIT?esc((AUDIT.generated_at||'').slice(0,10)):'—'}</b>；自动巡检周期：<b>每月 1 日</b>（GitHub Actions）。</p>
+        <table class="tbl">
+          <tr><th>体系</th><th>依据文件</th><th>版本</th><th>最近核对</th><th>状态</th><th>来源</th></tr>
+          ${rows}
+        </table>
+        <div class="note">复核口径：以认证机构官网发布的现行手册 / 标准原文为准，逐项比对"等级分数线、指标权重、满分与硬性门槛"。
+          若官方发布新版本，先在本表登记版本变更，再更新卡片数据与计算器。</div>
+      </div>
+    </details>
   </section>`;
 }
 
@@ -1098,10 +1106,29 @@ function autoState(id){
   if(l3.status==='missing') return {cls:'warn',text:'△ 巡检未覆盖',tip:'巡检结果中没有该体系'};
   const srcs=((l3.audit||{}).sources||[]);
   if(l3.status==='ok') return {cls:'ok',text:'✓ 自动核对通过',tip:'官方源正文指纹未变\n'+srcs.map(x=>x.url).join('\n')};
+  if(l3.status==='archived') return {cls:'arch',text:'✓ 官方原文存档一致',tip:'线上源抓取受限，改用本地存档的官方原文比对 sha256，一致\n'+(l3.audit&&l3.audit.archive?l3.audit.archive.file:'')};
   if(l3.status==='changed') return {cls:'chg',text:'△ 官方页面有更新，待确认',tip:'官方源正文指纹变化，可能是新版发布，需人工确认后更新基准'};
   if(l3.status==='seeded') return {cls:'warn',text:'△ 指纹基线已建立',tip:'首次巡检，下一轮起可自动识别变化'};
-  if(l3.status==='unreachable') return {cls:'na',text:'· 官方源抓取受限',tip:'该来源拒绝抓取/需登录/动态渲染，转人工核对'};
+  if(l3.status==='unreachable'){
+    const m=l3.audit&&l3.audit.manual;
+    const why=srcs.map(x=>naReason(x.error)).filter(Boolean)[0]||'该来源拒绝抓取/需登录/动态渲染';
+    return {cls:'na',text:'⚠ 官方源抓取受限 · 已人工联网核对',
+      tip:why+'\n'+(m?('人工核对日 '+m.at+'\n原文：'+m.quote+'\n'+m.url):'已转人工核对')};
+  }
   return {cls:'na',text:'· 待人工核对',tip:''};
+}
+
+/* 抓取失败原因的人话解释 */
+function naReason(err){
+  const e=(err||'').toLowerCase();
+  if(!e) return '未取到内容';
+  if(e.includes('403')) return '站点返回 403，拒绝自动抓取';
+  if(e.includes('timed out')||e.includes('timeout')) return '读取超时（大文件 / 站点限速）';
+  if(e.includes('name resolution')||e.includes('nodename')||e.includes('-3')) return '域名解析失败（境外网络不可达）';
+  if(e.includes('certificate')||e.includes('ssl')) return 'SSL 握手被拒';
+  if(e.includes('reset')) return '连接被重置';
+  if(e.includes('404')) return '页面已不存在';
+  return err;
 }
 
 function pct(n,d){ return d?Math.round(n/d*100):0; }
@@ -1109,12 +1136,19 @@ function pct(n,d){ return d?Math.round(n/d*100):0; }
 function autocheckHTML(){
   if(!CHECK){
     return `<section class="ac" id="autocheck">
-      <div class="ac-head"><h2>🛡 自动核对</h2><span class="ac-loading">${AC_ERR||'正在读取核对基准与巡检结果…'}</span></div>
+      <details class="fold">
+        <summary class="fold-sum">
+          <span class="fold-t">🛡 自动核对</span>
+          <span class="fold-s">${AC_ERR?esc(AC_ERR):'正在读取核对基准与巡检结果…'}</span>
+          <span class="fold-x">展开</span>
+        </summary>
+      </details>
     </section>`;
   }
   const l1p=CHECK.l1.filter(x=>x.ok).length, l1t=CHECK.l1.length;
   const l2p=CHECK.l2.filter(x=>x.ok).length, l2t=CHECK.l2.length;
-  const oks=CHECK.l3.filter(x=>['ok','seeded'].includes(x.status)).length;
+  const oks=CHECK.l3.filter(x=>['ok','seeded','archived'].includes(x.status)).length;
+  const arc=CHECK.l3.filter(x=>x.status==='archived').length;
   const chg=CHECK.l3.filter(x=>x.status==='changed').length;
   const unr=CHECK.l3.filter(x=>x.status==='unreachable').length;
   const l3t=CHECK.l3.length;
@@ -1127,21 +1161,23 @@ function autocheckHTML(){
     const l3=CHECK.l3.find(x=>x.id===s.id);
     const a=l3&&l3.audit;
     const st=autoState(s.id);
+    const na=!!(l3&&l3.status==='unreachable');
     const cells=[
       one.bad.length?`<span class="st bad" title="${esc(one.bad.map(b=>b.label+'：'+b.detail).join('\n'))}">${one.pass}/${one.total}</span>`
                     :`<span class="st ok">${one.pass}/${one.total}</span>`,
       l2&&l2.ok?`<span class="st ok">一致</span>`
                :`<span class="st bad" title="${esc((l2?l2.diffs:['未比对']).join('；'))}">不一致</span>`,
-      `<span class="st ${st.cls}" title="${esc(st.tip)}">${st.text.replace(/^[✓△✕·]\s*/,'')}</span>`,
+      `<span class="st ${st.cls}" title="${esc(st.tip)}">${st.text.replace(/^[✓△✕·⚠]\s*/,'')}</span>`
+        ,
     ];
     const ev=(a&&a.sources&&a.sources.length)
       ? a.sources.map(x=>`<div class="ac-ev"><a href="${x.url}" target="_blank" rel="noopener">${x.url.replace(/^https?:\/\//,'').slice(0,52)}</a>
           ${x.http?`<span>HTTP ${x.http}</span>`:''}
           ${x.changed?'<b class="chg">指纹已变</b>':''}
-          ${x.error?`<span class="err">${esc(x.error)}</span>`:''}
+          ${x.error?`<span class="err">${esc(naReason(x.error))}</span>`:''}
           ${x.hash?`<code>${x.hash}</code>`:''}</div>`).join('')
       : '<div class="ac-ev muted">无可机读官方源，依据人工核对</div>';
-    return `<tr>
+    return `<tr${na?' class="row-na"':''}>
       <td><a href="#cert-${s.id}">${s.abbr}</a></td>
       <td>${cells[0]}</td>
       <td>${cells[1]}</td>
@@ -1150,48 +1186,82 @@ function autocheckHTML(){
     </tr>`;
   }).join('');
 
+  /* 抓取受限清单：明确标注 + 说明改用的核对方式（本地存档 / 人工联网核对） */
+  const limList=CHECK.l3.filter(x=>x.status==='unreachable'||x.status==='archived');
+  const naBox = limList.length ? `<div class="na-box">
+      <div class="na-box-t">⚠ ${limList.length} 个体系的官方源无法直接抓取 —— 已改用<b>官方原文存档</b>或<b>人工联网核对</b>，逐条标注如下</div>
+      ${limList.map(x=>{
+        const a=(x.audit&&x.audit.sources)||[];
+        const why=a.map(y=>naReason(y.error)).filter(Boolean)[0]||'取不到内容';
+        const m=x.audit&&x.audit.manual;
+        const ar=x.audit&&x.audit.archive;
+        const ok=x.status==='archived';
+        const link=ok?((ar&&ar.url)||''):((m&&m.url)||'');
+        const how=ok
+          ? `本地存档的官方原文 sha256 一致（${esc(String((ar&&ar.file)||'').split('/').pop())}）`
+          : (m?`按官网原文核对：${esc(m.quote)}`:'已转人工核对');
+        return `<div class="na-item ${ok?'ok':'pend'}">
+          <b>${x.abbr}</b>
+          <span class="na-tag ${ok?'ok':'pend'}">${ok?'存档比对通过':'已人工核对'}</span>
+          <span class="na-why">${esc(why)}</span>
+          <span class="na-how">${how}</span>
+          <span class="na-at">核对日 ${esc((m&&m.at)||x.checked_at||'—')}</span>
+          ${link?`<a href="${esc(link)}" target="_blank" rel="noopener">来源 ↗</a>`:''}
+        </div>`;
+      }).join('')}
+      <div class="na-foot">这几项不参与「正文指纹未变」的自动判定：能下载的官方原文已存档到 <code>data/refs/</code> 并校验 sha256；站点完全不可达的（如 NABERS、住建部）转人工读原文核对并记录核对日。数据本身仍受 ①自检 与 ②基准比对 双重约束。</div>
+    </div>` : '';
+
   const banner = expired
     ? `<div class="ac-banner warn">⚠ 核对基准已 ${age} 天未复检（上限 ${maxAge} 天），建议本轮重新核对官方原文后更新 <code>data/facts.json</code>。</div>`
     : `<div class="ac-banner ok">✓ 核对基准 ${age==null?'—':age} 天前更新，在 ${maxAge} 天有效期内。</div>`;
   const errLine = AC_ERR?`<div class="ac-banner bad">${esc(AC_ERR)}（本地预览时请用 http 服务打开，file:// 无法读取 data/）</div>`:'';
 
   return `<section class="ac" id="autocheck">
-    <div class="ac-head">
-      <h2>🛡 自动核对</h2>
-      <div class="ac-actions">
-        <span class="ac-when">官方源巡检：<b>${AUDIT?esc(AUDIT.generated_at):'—'}</b> · 基准：<b>${FACTS?esc(FACTS.baseline_updated):'—'}</b></span>
-        <button class="ac-btn" id="acRefresh">↻ 重新读取核对结果</button>
+    <details class="fold">
+      <summary class="fold-sum">
+        <span class="fold-t">🛡 自动核对</span>
+        <span class="fold-s">① 自检 ${l1p}/${l1t} · ② 基准 ${l2p}/${l2t} · ③ 官方源 ${oks}/${l3t} 通过${unr?` · ${unr} 项抓取受限`:''}${chg?` · ${chg} 项有更新`:''}</span>
+        <span class="fold-x">展开</span>
+      </summary>
+      <div class="fold-body">
+        <div class="ac-head">
+          <div class="ac-actions">
+            <span class="ac-when">官方源巡检：<b>${AUDIT?esc(AUDIT.generated_at):'—'}</b> · 基准：<b>${FACTS?esc(FACTS.baseline_updated):'—'}</b></span>
+            <button class="ac-btn" id="acRefresh">↻ 重新读取核对结果</button>
+          </div>
+        </div>
+        <p class="ac-intro">每次打开本页都会自动跑三层核对：<b>① 页面自检</b>（数据结构内部一致性，浏览器本地计算）→ <b>② 基准比对</b>（页面数值与人工核对后固化的官方基准逐项对照）→ <b>③ 官方源巡检</b>（每月抓取认证机构官网原文比对正文指纹，由 GitHub Actions 执行）。</p>
+        <div class="ac-cards">
+          <div class="ac-card ${l1p===l1t?'ok':'bad'}">
+            <div class="ac-k">① 页面自检</div>
+            <div class="ac-v">${l1p}<small>/${l1t}</small></div>
+            <div class="ac-d">权重合计 · 分数线递增 · 等级表↔计算器 · 依据字段</div>
+          </div>
+          <div class="ac-card ${l2p===l2t?'ok':'bad'}">
+            <div class="ac-k">② 基准比对</div>
+            <div class="ac-v">${l2p}<small>/${l2t}</small></div>
+            <div class="ac-d">页面数值与官方基准一致的体系数</div>
+          </div>
+          <div class="ac-card ${chg?'warn':(unr?'na':'ok')}">
+            <div class="ac-k">③ 官方源巡检</div>
+            <div class="ac-v">${oks}<small>/${l3t}</small></div>
+            <div class="ac-d">通过 ${oks}${arc?`（其中存档比对 ${arc}）`:''} · 有更新 ${chg} · 抓取受限 ${unr}</div>
+          </div>
+          <div class="ac-card ${expired?'warn':'ok'}">
+            <div class="ac-k">基准时效</div>
+            <div class="ac-v">${age==null?'—':age}<small> 天</small></div>
+            <div class="ac-d">上限 ${maxAge} 天，超期自动提醒复检</div>
+          </div>
+        </div>
+        ${errLine}${banner}${naBox}
+        <table class="tbl ac-tbl">
+          <tr><th>体系</th><th>① 自检</th><th>② 基准</th><th>③ 官方源</th><th>证据</th></tr>
+          ${rows}
+        </table>
+        <div class="note">判定口径：②不一致＝页面数值被改动但未同步核对基准（红色，必须处理）；③「官方页面有更新」＝正文指纹变化（可能是新版发布，也可能是页面改版），需人工读原文确认后再 <code>--accept-changes</code>；抓取受限的体系（政府站反爬/纯 JS 渲染/需登录）转人工核对并列在上方清单，不臆断为通过。</div>
       </div>
-    </div>
-    <p class="ac-intro">每次打开本页都会自动跑三层核对：<b>① 页面自检</b>（数据结构内部一致性，浏览器本地计算）→ <b>② 基准比对</b>（页面数值与人工核对后固化的官方基准逐项对照）→ <b>③ 官方源巡检</b>（每月抓取认证机构官网原文比对正文指纹，由 GitHub Actions 执行）。</p>
-    <div class="ac-cards">
-      <div class="ac-card ${l1p===l1t?'ok':'bad'}">
-        <div class="ac-k">① 页面自检</div>
-        <div class="ac-v">${l1p}<small>/${l1t}</small></div>
-        <div class="ac-d">权重合计 · 分数线递增 · 等级表↔计算器 · 依据字段</div>
-      </div>
-      <div class="ac-card ${l2p===l2t?'ok':'bad'}">
-        <div class="ac-k">② 基准比对</div>
-        <div class="ac-v">${l2p}<small>/${l2t}</small></div>
-        <div class="ac-d">页面数值与官方基准一致的体系数</div>
-      </div>
-      <div class="ac-card ${chg?'warn':(unr?'na':'ok')}">
-        <div class="ac-k">③ 官方源巡检</div>
-        <div class="ac-v">${oks}<small>/${l3t}</small></div>
-        <div class="ac-d">指纹未变 ${oks} · 有更新 ${chg} · 抓取受限 ${unr}</div>
-      </div>
-      <div class="ac-card ${expired?'warn':'ok'}">
-        <div class="ac-k">基准时效</div>
-        <div class="ac-v">${age==null?'—':age}<small> 天</small></div>
-        <div class="ac-d">上限 ${maxAge} 天，超期自动提醒复检</div>
-      </div>
-    </div>
-    ${errLine}${banner}
-    <table class="tbl ac-tbl">
-      <tr><th>体系</th><th>① 自检</th><th>② 基准</th><th>③ 官方源</th><th>证据</th></tr>
-      ${rows}
-    </table>
-    <div class="note">判定口径：②不一致＝页面数值被改动但未同步核对基准（红色，必须处理）；③「官方页面有更新」＝正文指纹变化（可能是新版发布，也可能是页面改版），需人工读原文确认后再 <code>--accept-changes</code>；抓取受限的体系（政府站反爬/纯 JS 渲染/需登录）转人工核对，不臆断为通过。</div>
+    </details>
   </section>`;
 }
 
@@ -1214,6 +1284,28 @@ document.addEventListener('click',e=>{
   AC_ERR=''; AC_BUSY=true; btn.textContent='读取中…';
   loadRemote().then(()=>renderMain($('#searchBox').value));
 });
+
+/* 折叠区：展开/收起文案 + 锚点跳转时自动展开 */
+document.addEventListener('toggle',e=>{
+  const d=e.target;
+  if(d&&d.tagName==='DETAILS'){
+    const box=d.closest('.fold');
+    if(box){ const x=box.querySelector('.fold-x'); if(x) x.textContent=d.open?'收起':'展开'; }
+  }
+},true);
+
+function openFoldFor(hash){
+  if(!hash||hash.charAt(0)!=='#') return;
+  const el=document.querySelector(hash);
+  const d=el&&el.querySelector('details.fold, .fold');
+  if(d&&!d.open) d.open=true;
+}
+window.addEventListener('hashchange',()=>openFoldFor(location.hash));
+document.addEventListener('click',e=>{
+  const a=e.target.closest&&e.target.closest('a[href^="#"]');
+  if(a) setTimeout(()=>openFoldFor(a.getAttribute('href')),0);
+});
+if(location.hash) setTimeout(()=>openFoldFor(location.hash),0);
 
 /* 侧栏滚动高亮 */
 var io=new IntersectionObserver(es=>{

@@ -150,3 +150,39 @@ table.tbl tr td:first-child{font-weight:600;white-space:nowrap}
 .st.chg{background:#fdf3e3;color:#8a6d1f;border:1px solid #f0dcb4}
 .st.na{background:#eef2f7;color:#5b6b7c;border:1px solid #dbe3ea}
 @media(max-width:760px){.ac{padding:14px}.ac-v{font-size:23px}.ac-tbl{display:block;overflow-x:auto;white-space:nowrap}}
+
+/* ---------- 折叠区块（自动核对 / 数据核对记录） ---------- */
+.fold>summary{list-style:none;display:flex;align-items:center;gap:12px;flex-wrap:wrap;cursor:pointer;outline:none}
+.fold>summary::-webkit-details-marker{display:none}
+.fold>summary::marker{content:''}
+.fold-sum{padding:2px 0}
+.fold-t{font-size:18px;font-weight:800;letter-spacing:.2px;flex:none}
+.fold-s{font-size:12.6px;color:var(--muted);flex:1;min-width:180px;line-height:1.6}
+.fold-x{font-size:12px;color:var(--accent);border:1px solid #ccd6e0;border-radius:999px;padding:3px 12px;flex:none;background:#fff}
+.fold-x::before{content:'▸ ';font-size:10px}
+.fold[open] .fold-x::before{content:'▾ '}
+.fold>summary:hover .fold-x{background:#eef4fb;border-color:#9dc0e4}
+.fold-body{margin-top:14px;padding-top:14px;border-top:1px dashed var(--line)}
+.ac .fold-body>.ac-head{margin-bottom:10px;justify-content:flex-end}
+
+/* ---------- 抓取受限清单 ---------- */
+.na-box{border:1px solid #f0dcb4;background:#fffcf3;border-radius:10px;padding:12px 14px;margin:0 0 14px}
+.na-box-t{font-size:13px;color:#8a6d1f;font-weight:700;margin-bottom:8px;line-height:1.6}
+.na-item{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;font-size:12.3px;padding:6px 0;border-top:1px dashed #f0e3c4;line-height:1.6}
+.na-item:first-of-type{border-top:none}
+.na-item>b{min-width:64px;color:#3d4a57}
+.na-tag{font-size:11px;border-radius:999px;padding:1px 8px;font-weight:700;flex:none}
+.na-tag.ok{background:var(--green-bg);color:#0b6b48;border:1px solid #bfe5d5}
+.na-tag.pend{background:#fdf3e3;color:#8a6d1f;border:1px solid #f0dcb4}
+.na-why{color:#a52a1e;font-size:11.8px}
+.na-how{color:#5b6b7c;flex:1;min-width:200px}
+.na-at{color:var(--muted);font-size:11.4px}
+.na-item a{color:var(--accent);text-decoration:none;font-size:11.8px}
+.na-item a:hover{text-decoration:underline}
+.na-foot{font-size:11.5px;color:#8a7a55;margin-top:8px;padding-top:8px;border-top:1px solid #f0e3c4;line-height:1.7}
+.na-foot code{background:#f6ead0;border-radius:4px;padding:0 5px;font-size:11px}
+.na-sub{font-size:10.8px;color:var(--muted);margin-top:3px;font-weight:600}
+.na-sub.ok{color:#0b6b48}
+.st.arch{background:var(--green-bg);color:#0b6b48;border:1px solid #bfe5d5}
+tr.row-na td{background:#fffdf7}
+@media(max-width:760px){.fold-t{font-size:16px}.fold-s{font-size:11.8px;width:100%;order:3}.na-how{min-width:0;width:100%}}
