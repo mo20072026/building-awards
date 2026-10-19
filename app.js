@@ -1125,6 +1125,7 @@ function naReason(err){
   if(e.includes('403')) return '站点返回 403，拒绝自动抓取';
   if(e.includes('timed out')||e.includes('timeout')) return '读取超时（大文件 / 站点限速）';
   if(e.includes('name resolution')||e.includes('nodename')||e.includes('-3')) return '域名解析失败（境外网络不可达）';
+  if(e.includes('remotedisconnected')||e.includes('remote end closed')) return '站点主动断开连接（反爬 / 地域限制）';
   if(e.includes('certificate')||e.includes('ssl')) return 'SSL 握手被拒';
   if(e.includes('reset')) return '连接被重置';
   if(e.includes('404')) return '页面已不存在';
